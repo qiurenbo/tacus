@@ -1,0 +1,30 @@
+{
+  "name": "fast-recorder",
+  "version": "1.0.0",
+  "description": "fast-recorder is a simple library to recorder audio in browser",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "dev": "nodemon --config nodemon.json",
+    "build": "babel src --out-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiurenbo/fast-recorder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qiurenbo/fast-recorder/issues"
+  },
+  "homepage": "https://github.com/qiurenbo/fast-recorder#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "nodemon": "^2.0.4"
+  }
+}

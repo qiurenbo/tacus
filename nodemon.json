@@ -1,0 +1,10 @@
+{
+  "restartable": "rs",
+  "verbose": true,
+  "watch": ["src/"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "exec": "npm run build",
+  "ext": "js,json"
+}
