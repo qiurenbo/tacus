@@ -14,7 +14,6 @@ startAndStopBtn.addEventListener("click", function () {
       recorder.stop((url) => {
         audio.src = url;
         blobUrl = url;
-        console.log(url);
       });
       pauseAndResumeBtn.disabled = true;
       downloadBtn.disabled = false;
@@ -45,7 +44,6 @@ pauseAndResumeBtn.addEventListener("click", function () {
 });
 
 function downloadAudio() {
-  console.log(blobUrl);
   const downloadEl = document.createElement("a");
   downloadEl.style = "display: none";
   downloadEl.innerHTML = "download";

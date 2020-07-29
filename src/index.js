@@ -15,7 +15,7 @@ class fast {
       navigator.mediaDevices.getUserMedia({ audio: true }).then(
         (stream) => {
           if (this.config.method === "MediaRecorder") {
-            this.recorder = new _MediaRecorder(stream, this.config.mimeType);
+            this.recorder = new _MediaRecorder(stream, this.config);
           } else if (this.config.method === "AudioContext") {
           } else {
             throw new Error("Unsupported method.");
