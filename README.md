@@ -12,11 +12,9 @@ fast recorder use MediaRecorder and AudioContext as core recorder api. And use A
 
 ### MediaRecorder
 
-- there’s no bitrate or picture quality control
+- there’s no bitrate control
 
 - there’s no sample rate or audio quality control
-
-- no support for .mp4, H.264 video and/or AAC audio
 
 - .webm files (with Vorbis/Opus audio and VP8/VP9 video) will have to be converted before they playback on virtually anything else other than the browsers they were recorded in
 
