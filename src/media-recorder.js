@@ -1,14 +1,16 @@
 export class _MediaRecorder {
   mediaRecorder = null;
   chunks = [];
+  mimeType = { type: "audio/ogg; codecs=opus" };
   cb = null;
 
   get state() {
     return this.mediaRecorder.state;
   }
 
-  constructor(stream) {
-    this.mediaRecorder = new MediaRecorder(stream);
+  constructor(stream, mimeType) {
+    this.mediaRecorder = new MediaRecorder(stream, this.mimeType);
+    this.mimeType = mimeType || this.mimeType;
     this.addListeners();
   }
 
@@ -19,9 +21,7 @@ export class _MediaRecorder {
     };
 
     this.mediaRecorder.onstop = (e) => {
-      const blob = new Blob(this.chunks, {
-        type: "audio/ogg; codecs=opus",
-      });
+      const blob = new Blob(this.chunks, this.mimeType);
       this.chunks = [];
       const url = window.URL.createObjectURL(blob);
       this.cb(url);
@@ -29,13 +29,27 @@ export class _MediaRecorder {
   }
 
   start() {
-    if (this.state !== "recording") {
+    if (this.state === "inactive") {
       this.mediaRecorder.start();
     }
   }
 
-  stop(cb) {
+  pause() {
     if (this.state === "recording") {
+      mediaRecorder.pause();
+      // recording paused
+    }
+  }
+
+  resume() {
+    if (this.state === "paused") {
+      this.cb = cb;
+      this.mediaRecorder.resume();
+    }
+  }
+
+  stop(cb) {
+    if (this.state === "recording" || this.state === "paused") {
       this.cb = cb;
       this.mediaRecorder.stop();
     }

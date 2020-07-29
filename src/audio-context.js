@@ -19,7 +19,7 @@ export class _MediaRecorder {
 
     this.recorder.onstop = (e) => {
       const blob = new Blob(this.chunks, {
-        type: "audio/ogg; codecs=opus",
+        type: "audio/webm; codecs=opus",
       });
       this.chunks = [];
       this.url = window.URL.createObjectURL(blob);

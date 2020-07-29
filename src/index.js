@@ -2,7 +2,9 @@
 import { _MediaRecorder } from "./media-recorder";
 class fast {
   recorder;
-  config = { method: "MediaRecorder" };
+  config = {
+    method: "MediaRecorder",
+  };
 
   constructor(config) {
     this.config = config || this.config;
@@ -13,7 +15,7 @@ class fast {
       navigator.mediaDevices.getUserMedia({ audio: true }).then(
         (stream) => {
           if (this.config.method === "MediaRecorder") {
-            this.recorder = new _MediaRecorder(stream);
+            this.recorder = new _MediaRecorder(stream, this.config.mimeType);
           } else if (this.config.method === "AudioContext") {
           } else {
             throw new Error("Unsupported method.");
@@ -34,6 +36,14 @@ class fast {
 
   stop(cb) {
     this.recorder.stop(cb);
+  }
+
+  pause() {
+    this.recorder.pause();
+  }
+
+  resume(cb) {
+    this.recorder.resume(cb);
   }
 }
 

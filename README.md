@@ -44,6 +44,19 @@ callback like callback(url)=>{}
 
 `url` is an object url.
 
+
+### pause
+
+Pause Recording
+```
+recorder.pause();
+```
+### resume
+
+Resume Recording
+```
+recorder.resume();
+```
 ## Reference
 [MDN-MediaStreamAudioSourceNode](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioSourceNode)
 
