@@ -52,4 +52,5 @@ function downloadAudio() {
   document.body.appendChild(downloadEl);
   downloadEl.click();
   document.body.removeChild(downloadEl);
+  downloadBtn.disabled = true;
 }
