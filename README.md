@@ -4,7 +4,7 @@ fast-recorder is a simple library to recoder audio in browser.
 
 ## Usage
 
-see (./example)[example]
+see [example](./example)
 
 ## Docs
 
