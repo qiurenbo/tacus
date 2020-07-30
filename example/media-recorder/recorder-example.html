@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <title>recorder-example</title>
+  </head>
+  <body>
+    <button id="start-stop">Start</button>
+    <button id="pause-resume" disabled="true">Pause</button>
+
+    <div><audio id="audio" controls class="audio-player"></audio></div>
+    <button id="download" disabled="true" onclick="downloadAudio()">
+      Download
+    </button>
+  </body>
+  <script src="../dist/bundle.js"></script>
+  <script src="./recorder.js"></script>
+</html>

@@ -1,13 +1,34 @@
 "use strict";
-import { _MediaRecorder } from "./media-recorder";
+import { _MediaRecorder } from "./media-recorder/media-recorder";
+import { _CompatibleAudio } from "./audio-context/compatible/compatible";
+
 class fast {
   recorder;
+
   config = {
-    method: "MediaRecorder",
+    method: "AudioContext",
+    mimeType: "audio/wav",
+
+    // same as https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createScriptProcessor
+    processor: {
+      bufferLen: 4096,
+      numberOfInputChannels: 1,
+      numberOfOutputChannels: 1,
+    },
+
+    // same as https://developer.mozilla.org/en-US/docs/Web/API/AudioContextOptions
+    context: {
+      latencyHint: "interactive",
+      sampleRate: 16000,
+    },
   };
 
   constructor(config) {
-    this.config = config || this.config;
+    for (const key in config) {
+      if (config.hasOwnProperty(key)) {
+        this.config[key] = config[key];
+      }
+    }
   }
 
   open() {
@@ -15,8 +36,9 @@ class fast {
       navigator.mediaDevices.getUserMedia({ audio: true }).then(
         (stream) => {
           if (this.config.method === "MediaRecorder") {
-            this.recorder = new _MediaRecorder(stream, this.config);
+            this.recorder = new _MediaRecorder(stream);
           } else if (this.config.method === "AudioContext") {
+            this.recorder = new _CompatibleAudio(stream, this.config);
           } else {
             throw new Error("Unsupported method.");
           }

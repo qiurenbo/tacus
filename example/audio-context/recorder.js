@@ -2,7 +2,7 @@ const startAndStopBtn = document.getElementById("start-stop");
 const pauseAndResumeBtn = document.getElementById("pause-resume");
 const downloadBtn = document.getElementById("download");
 const audio = document.getElementById("audio");
-const recorder = new fast();
+const recorder = new fast({ method: "MediaRecorder" });
 let blobUrl;
 recorder.open();
 

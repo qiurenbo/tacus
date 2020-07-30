@@ -1,29 +1,14 @@
 export class _MediaRecorder {
   mediaRecorder = null;
   chunks = [];
-  config = {
-    mimeType: "audio/webm;codecs=opus",
-  };
-
   cb = null;
 
   get state() {
     return this.mediaRecorder.state;
   }
 
-  constructor(stream, config) {
-    if (config.mimeType) {
-      this.config.mimeType = config.mimeType;
-    }
-
-    if (!MediaRecorder.isTypeSupported(this.config.mimeType)) {
-      throw new Error("Unsupported MIME Type.");
-    }
-
-    console.log(this.config);
-    this.mediaRecorder = new MediaRecorder(stream, {
-      mimeType: this.config.mimeType,
-    });
+  constructor(stream) {
+    this.mediaRecorder = new MediaRecorder(stream);
 
     this.addListeners();
   }
@@ -34,8 +19,9 @@ export class _MediaRecorder {
     };
 
     this.mediaRecorder.onstop = (e) => {
-      const blob = new Blob(this.chunks, { type: this.config.mimeType });
+      const blob = new Blob(this.chunks);
       this.chunks = [];
+      console.log(blob);
       const url = window.URL.createObjectURL(blob);
       this.cb(url);
     };
@@ -56,7 +42,6 @@ export class _MediaRecorder {
 
   resume() {
     if (this.state === "paused") {
-      this.cb = cb;
       this.mediaRecorder.resume();
     }
   }
