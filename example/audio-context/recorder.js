@@ -2,8 +2,14 @@ const startAndStopBtn = document.getElementById("start-stop");
 const pauseAndResumeBtn = document.getElementById("pause-resume");
 const downloadBtn = document.getElementById("download");
 const audio = document.getElementById("audio");
-const recorder = new fast({ method: "MediaRecorder" });
-let blobUrl;
+const recorder = new fast({
+  method: "AudioContext",
+  mimeType: "audio/wav",
+  bufferLen: 4096,
+  sampleRate: 16000,
+});
+
+let blob;
 recorder.open();
 
 startAndStopBtn.addEventListener("click", function () {
@@ -11,12 +17,15 @@ startAndStopBtn.addEventListener("click", function () {
   switch (state) {
     case "Stop":
       startAndStopBtn.innerHTML = "Start";
-      recorder.stop((url) => {
-        audio.src = url;
-        blobUrl = url;
-      });
+      recorder.stop();
       pauseAndResumeBtn.disabled = true;
       downloadBtn.disabled = false;
+      recorder.exportBlob("wav", (_blob) => {
+        blob = _blob;
+        audio.src = URL.createObjectURL(blob);
+        console.log(blob);
+      });
+      //   recorder.clear();
       break;
 
     case "Start":
@@ -47,8 +56,8 @@ function downloadAudio() {
   const downloadEl = document.createElement("a");
   downloadEl.style = "display: none";
   downloadEl.innerHTML = "download";
-  downloadEl.download = "audio.webm";
-  downloadEl.href = blobUrl;
+  downloadEl.download = "audio.wav";
+  downloadEl.href = URL.createObjectURL(blob);
   document.body.appendChild(downloadEl);
   downloadEl.click();
   document.body.removeChild(downloadEl);

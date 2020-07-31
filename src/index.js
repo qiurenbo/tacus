@@ -1,6 +1,6 @@
 "use strict";
 import { _MediaRecorder } from "./media-recorder/media-recorder";
-import { _CompatibleAudio } from "./audio-context/compatible/compatible";
+import { _CompatibleAudio } from "./audio-context/compatible/compatible-recorder";
 
 class fast {
   recorder;
@@ -10,25 +10,19 @@ class fast {
     mimeType: "audio/wav",
 
     // same as https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createScriptProcessor
-    processor: {
-      bufferLen: 4096,
-      numberOfInputChannels: 1,
-      numberOfOutputChannels: 1,
-    },
+    bufferLen: 4096,
+    numberOfInputChannels: 1,
+    numberOfOutputChannels: 1,
 
     // same as https://developer.mozilla.org/en-US/docs/Web/API/AudioContextOptions
-    context: {
-      latencyHint: "interactive",
-      sampleRate: 16000,
-    },
+    latencyHint: "interactive",
+    sampleRate: 16000,
+
+    bitDepth: 16,
   };
 
   constructor(config) {
-    for (const key in config) {
-      if (config.hasOwnProperty(key)) {
-        this.config[key] = config[key];
-      }
-    }
+    Object.assign(this.config, config);
   }
 
   open() {
@@ -64,8 +58,16 @@ class fast {
     this.recorder.pause();
   }
 
+  clear() {
+    this.recorder.clear();
+  }
+
   resume(cb) {
     this.recorder.resume(cb);
+  }
+
+  exportBlob(type, cb) {
+    this.recorder.exportBlob(type, cb);
   }
 }
 

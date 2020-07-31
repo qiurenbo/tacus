@@ -1,3 +1,11 @@
+import audioProcessor from "./audio-processor";
+
+// function worker() {
+//   onmessage = (event) => {
+//     console.log("i am worker, receive:" + event.data.cmd);
+//     postMessage({ result: "message from worker" });
+//   };
+// }
 /**
  * Reference by https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
  */
@@ -27,13 +35,35 @@ export class _CompatibleAudio {
   // State is used for record the state of audio recorder. You can use 'inactive' and 'recording' and 'suspending'.
   state = "inactive";
 
-  // web worker
+  // web worker to parse audio
   worker = null;
 
+  config = null;
+
+  // Callback to be executed when worker post message to main thread.
+  cb = null;
   constructor(stream, config) {
+    this.config = config;
+    // console.log(this.config);
+    this.worker = this.createWorker(audioProcessor);
+    this.worker.onmessage = (e) => {
+      console.log(e.data);
+
+      if (typeof this.cb == "function") {
+        this.cb(e.data.blob);
+      }
+    };
+    this.worker.postMessage({
+      cmd: "init",
+      config: this.config,
+    });
+
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-    this.audioContext = new AudioContext(this.config.context);
+    this.audioContext = new AudioContext({
+      latencyHint: this.config.latencyHint,
+      sampleRate: this.config.sampleRate,
+    });
     /**
      * Creates a MediaStreamAudioSourceNode associated with a MediaStream representing an audio stream
      * which may come from the local computer microphone or other sources.
@@ -50,27 +80,25 @@ export class _CompatibleAudio {
      * was replaced by AudioWorklet.
      */
     this.node = this.context.createScriptProcessor(
-      this.config.processor.bufferLen,
-      this.config.processor.numberOfInputChannels,
-      this.config.processor.numberOfOutputChannels
+      this.config.bufferLen,
+      this.config.numberOfInputChannels,
+      this.config.numberOfOutputChannels
     );
-
-    this.worker = new Worker("./worker.js");
-    this.worker.postMessage({
-      cmd: "init",
-      sampleRate:this.config.sampleRate,
-      numberOfOutputChannels:this.config.numberOfOutChannels;
-    });
 
     // Prepare for audio processing
     this.registerProcessor();
 
     /**
      * Input stream connect to processor node.
+     * Processor node connect to destination.
      * https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/connect
      */
 
     source.connect(this.node);
+
+    this.node.connect(this.context.destination);
+
+    this.audioContext.suspend();
   }
 
   registerProcessor() {
@@ -84,6 +112,7 @@ export class _CompatibleAudio {
        * We use audio context to suspend input stream process. This state judgement is unused.
        * But we can use state to track the state of audio context
        */
+
       if (this.state === "inactive" || this.state === "suspending") return;
 
       this.worker.postMessage({
@@ -103,7 +132,7 @@ export class _CompatibleAudio {
 
     for (
       let channel = 0;
-      channel < this.config.processor.numberOfInputChannels;
+      channel < this.config.numberOfInputChannels;
       channel++
     ) {
       buffer.push(e.inputBuffer.getChannelData(channel));
@@ -115,6 +144,7 @@ export class _CompatibleAudio {
   start() {
     if (this.state === "inactive") {
       this.state = "recording";
+      this.audioContext.resume();
     }
   }
 
@@ -142,10 +172,32 @@ export class _CompatibleAudio {
     }
   }
 
+  clear() {
+    if (this.state === "inactive") {
+      this.worker.postMessage({ cmd: "clear" });
+    }
+  }
+
+  exportBlob(type, cb) {
+    this.cb = cb;
+    this.worker.postMessage({
+      cmd: "exportBlob",
+      type,
+    });
+  }
+
   release() {
     this.worker.postMessage({
       cmd: "release",
     });
     this.audioContext.close();
+  }
+
+  createWorker(f) {
+    return new Worker(
+      URL.createObjectURL(
+        new Blob([`(${f.toString()})()`], { type: "application/javascript" })
+      )
+    );
   }
 }

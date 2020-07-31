@@ -21,7 +21,7 @@ export class _MediaRecorder {
     this.mediaRecorder.onstop = (e) => {
       const blob = new Blob(this.chunks);
       this.chunks = [];
-      console.log(blob);
+
       const url = window.URL.createObjectURL(blob);
       this.cb(url);
     };
