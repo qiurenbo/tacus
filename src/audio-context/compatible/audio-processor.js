@@ -26,7 +26,7 @@ export default function audioProcessor() {
 
   // onmessage must be a global variable
   self.onmessage = (event) => {
-    console.log("i am worker, receive:" + event.data.cmd);
+    // console.log("i am worker, receive:" + event.data.cmd);
     switch (event.data.cmd) {
       case "init":
         initialize(event.data.config);
@@ -36,7 +36,7 @@ export default function audioProcessor() {
         break;
       case "stop":
         break;
-      case "exportBlob":
+      case "export":
         if (event.data.type === "wav") {
           exportWAVBlob();
         }

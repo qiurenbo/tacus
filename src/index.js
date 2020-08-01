@@ -66,8 +66,8 @@ class fast {
     this.recorder.resume(cb);
   }
 
-  exportBlob(type, cb) {
-    this.recorder.exportBlob(type, cb);
+  export(type, cb) {
+    this.recorder.export(type, cb);
   }
 }
 

@@ -178,10 +178,10 @@ export class _CompatibleAudio {
     }
   }
 
-  exportBlob(type, cb) {
+  export(type, cb) {
     this.cb = cb;
     this.worker.postMessage({
-      cmd: "exportBlob",
+      cmd: "export",
       type,
     });
   }

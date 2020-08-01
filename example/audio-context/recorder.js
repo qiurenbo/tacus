@@ -20,7 +20,7 @@ startAndStopBtn.addEventListener("click", function () {
       recorder.stop();
       pauseAndResumeBtn.disabled = true;
       downloadBtn.disabled = false;
-      recorder.exportBlob("wav", (_blob) => {
+      recorder.export("wav", (_blob) => {
         blob = _blob;
         audio.src = URL.createObjectURL(blob);
       });
