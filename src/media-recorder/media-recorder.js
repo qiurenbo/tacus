@@ -20,8 +20,6 @@ export class _MediaRecorder {
 
     this.mediaRecorder.onstop = (e) => {
       const blob = new Blob(this.chunks);
-      this.chunks = [];
-
       const url = window.URL.createObjectURL(blob);
       this.cb(url);
     };
@@ -51,5 +49,9 @@ export class _MediaRecorder {
       this.cb = cb;
       this.mediaRecorder.stop();
     }
+  }
+
+  clear() {
+    this.chunks = [];
   }
 }

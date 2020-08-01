@@ -1,5 +1,3 @@
-// import { encodePCM32f2WAV, flatPCM32fSamples } from "./encoder";
-
 /**
  * AudioProcessor is a web worker for parse raw recording data.
  * It is used as a inline worker.
@@ -38,7 +36,7 @@ export default function audioProcessor() {
         break;
       case "export":
         if (event.data.type === "wav") {
-          exportWAVBlob();
+          exportWAV();
         }
         break;
       case "clear":
@@ -50,7 +48,7 @@ export default function audioProcessor() {
     }
   };
 
-  const exportWAVBlob = () => {
+  const exportWAV = () => {
     let buffers = [];
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
       buffers.push(
@@ -71,7 +69,7 @@ export default function audioProcessor() {
     );
     const blob = new Blob([wav], { type: "audio/wav" });
 
-    postMessage({ cmd: "exportWAVBlob", blob });
+    postMessage({ cmd: "exportWAV", blob });
   };
 
   const initialize = (config) => {

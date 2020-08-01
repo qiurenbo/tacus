@@ -8,20 +8,19 @@
   - [Bit Rate](#bit-rate)
   - [Channels](#channels)
 - [Usage](#usage)
-- [Docs](#docs)
+- [MediaRecorder VS AudioContext](#mediarecorder-vs-audiocontext)
   - [MediaRecorder](#mediarecorder)
     - [Audio Information](#audio-information)
-    - [constructor](#constructor)
     - [Reference](#reference)
   - [AudioContext](#audiocontext)
-    - [constructor](#constructor-1)
     - [Reference](#reference-1)
-  - [Common API](#common-api)
-    - [open](#open)
-    - [start](#start)
-    - [stop](#stop)
-    - [pause](#pause)
-    - [resume](#resume)
+- [API](#api)
+  - [constructor](#constructor)
+  - [open](#open)
+  - [start](#start)
+  - [stop](#stop)
+  - [pause](#pause)
+  - [resume](#resume)
 
 <!-- /TOC -->
 
@@ -31,11 +30,11 @@ fast-recorder is a simple library to recorder audio in browser.
 
 # Preparation
 
-Before use it, you should known Audio format.
+Before use it, you should known some knowledge of Audio format.
 
 ## Audio Format
 
-Common audio formats like wav, ogg, pcm, mp3 is a 'container' which is used to store codecs and audio information. Some formats may not contain codecs, but only contain the raw audio data, like wav and pcm.
+Common audio formats like wav, ogg, pcm, mp3 is a 'container' which means it is used to store codecs and data of audio.
 
 ## Sample Rate
 
@@ -43,11 +42,14 @@ The rate of capture and playback is called the sample rate.
 
 ## Bit Depth
 
-The sample size—more accurately, the number of bits used to describe each sample—is called the bit depth or word length.
+The number of bits used to describe each sample is called the bit depth.
 
 ## Bit Rate
 
-The number of bits transmitted per second is the bit rate.
+The number of bits transmitted per second is the bit rate. 
+```
+ bitRate = bitDepth * sampleRate
+```
 
 https://www.presonus.com/learn/technical-articles/sample-rate-and-bit-depth
 
@@ -59,11 +61,14 @@ https://www.gearbest.com/blog/how-to/6-types-of-sound-channels-2896
 
 # Usage
 
-see [example](./example)
+fast-recorder is an simple library for web recording. You only 
+have to learn six methods: open, start, pause, resume, stop, clear.
 
-# Docs
+See [examples](./example) for more details.
 
-By fast-recorder, you can choose MediaRecorder or AudioContext as a core recorder api. By default, fast-recorder use AudioContext as default. This is because. :point_down:
+# MediaRecorder VS AudioContext
+
+With fast-recorder, you can choose MediaRecorder or AudioContext as a core recorder api. By default, fast-recorder use AudioContext as default. This is because. :point_down:
 
 ## MediaRecorder
 
@@ -87,17 +92,7 @@ If you choose MediaRecorder as core API,something you must know before use it. T
 
 webm is an open source format that contains video compressed with VP8 or VP9 codecs and audio compressed with Vorbis or Opus codecs. The format is usually used for media content on web pages and it is supported by all the popular web-browser.
 
-### constructor
 
-Initialize a fast-recorder instance.
-
-As mentioned above, we can't control the output of MediaRecorder audio. So I don't provide a config to use it.
-
-```
-const recorder = new fast({
-    method: "MediaRecorder",
-});
-```
 
 ### Reference
 
@@ -108,19 +103,8 @@ const recorder = new fast({
 ## AudioContext
 
 fast-recorder use Web Audio API by default. For
-compatibility, fast-recorder use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
+compatibility and flexibility, fast-recorder use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
 
-### constructor
-
-Initialize a fast-recorder instance.
-
-As mentioned above, we can't control the output of AudioContext audio. So we don't provide a config to use it.
-
-```
-const recorder = new fast({
-    method: "AudioContext",
-});
-```
 
 ### Reference
 
@@ -128,9 +112,20 @@ const recorder = new fast({
 
 [MDN-AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext)
 
-## Common API
+# API
+## constructor
 
-### open
+Initialize a fast-recorder instance.
+
+```
+const recorder = new fast({
+    method: "MediaRecorder | AudioContext",
+});
+```
+
+
+
+## open
 
 Get recorder authority of browser.
 
@@ -138,7 +133,7 @@ Get recorder authority of browser.
 recorder.open();
 ```
 
-### start
+## start
 
 Start Recording
 
@@ -146,7 +141,7 @@ Start Recording
 recorder.start();
 ```
 
-### stop
+## stop
 
 Stop Recording
 
@@ -158,7 +153,7 @@ callback: function(url)
 
 `url` is an object url.
 
-### pause
+## pause
 
 Pause Recording
 
@@ -166,7 +161,7 @@ Pause Recording
 recorder.pause();
 ```
 
-### resume
+## resume
 
 Resume Recording
 
