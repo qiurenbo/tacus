@@ -1,4 +1,4 @@
-// import { encodeRAW2WAV, mergeBuffers } from "./encoder";
+// import { encodeRAW2WAV, flatRawData2D } from "./encoder";
 
 /**
  * AudioProcessor is a web worker for parse raw recording data.
@@ -9,11 +9,18 @@ export default function audioProcessor() {
 
   let numberOfOutputChannels = 1;
 
-  // an 2-D array buffer to store raw recording data which is floating data.
-  let rawData = [];
+  /**
+   * An 2D array buffer store multiple channels raw data. When recording, web audio api will fill an float 32 array with
+   * specified size. When it full, it will notify a web worker with message 'record'. Then the web worker store this piece
+   * in rawData2DInMultipleChannels.
+   */
+  let rawData2DInMultipleChannels = [];
 
-  // used to calculate the length of raw buffer
-  let rawLength = 0;
+  /**
+   * Calculate the total number of float32 data in an single channel of raw data.
+   * We use it to new a float32 array to
+   */
+  let numberOfFloat32InRawData2DInSingleChannel = 0;
 
   let bitDepth = 16;
 
@@ -47,13 +54,18 @@ export default function audioProcessor() {
   const exportWAVBlob = () => {
     let buffers = [];
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
-      buffers.push(mergeBuffers(rawData[channel], rawLength));
+      buffers.push(
+        flatRawData2D(
+          rawData2DInMultipleChannels[channel],
+          numberOfFloat32InRawData2DInSingleChannel
+        )
+      );
     }
 
     // Now only support single channel output
-    const raw = buffers[0];
+    const rawDataWithFlatFloat32InSingleChannel = buffers[0];
     const wav = encodeRAW2WAV(
-      raw,
+      rawDataWithFlatFloat32InSingleChannel,
       sampleRate,
       numberOfOutputChannels,
       bitDepth
@@ -69,7 +81,7 @@ export default function audioProcessor() {
     numberOfOutputChannels = config.numberOfOutputChannels;
 
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
-      rawData[channel] = [];
+      rawData2DInMultipleChannels[channel] = [];
     }
   };
 
@@ -77,18 +89,18 @@ export default function audioProcessor() {
     test = [];
     test[0] = [];
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
-      rawData[channel].push(rawPieceBuffer[channel]);
+      rawData2DInMultipleChannels[channel].push(rawPieceBuffer[channel]);
     }
 
-    rawLength += rawPieceBuffer[0].length;
-    // console.log(rawLength);
+    numberOfFloat32InRawData2DInSingleChannel += rawPieceBuffer[0].length;
+    // console.log(numberOfFloat32InRawData2DInSingleChannel);
   };
 
   const clear = () => {
     sampleRate = null;
     numberOfOutputChannels = 1;
-    rawData = [];
-    rawLength = 0;
+    rawData2DInMultipleChannels = [];
+    numberOfFloat32InRawData2DInSingleChannel = 0;
   };
 
   /**
@@ -117,15 +129,20 @@ export default function audioProcessor() {
     }
   };
 
-  const encodeRAW2WAV = (raw, sampleRate, numberOfOutputChannels, bitDepth) => {
+  const encodeRAW2WAV = (rawDataWithFlatFloat32InSingleChannel) => {
     // console.log(raw, sampleRate, numberOfOutputChannels, bitDepth);
-    let buffer = new ArrayBuffer(44 + raw.length * 2);
+
+    const byteDepth = bitDepth / 8;
+    const numberOfBytesInSingleChannel =
+      rawDataWithFlatFloat32InSingleChannel.length * byteDepth;
+    const byteRate = sampleRate * byteDepth;
+    let buffer = new ArrayBuffer(44 + numberOfBytesInSingleChannel);
     let view = new DataView(buffer);
 
     /* RIFF identifier */
     writeString(view, 0, "RIFF");
     /* RIFF chunk length */
-    view.setUint32(4, 36 + raw.length * 2, true);
+    view.setUint32(4, 36 + numberOfBytesInSingleChannel, true);
     /* RIFF type */
     writeString(view, 8, "WAVE");
     /* format chunk identifier */
@@ -139,28 +156,34 @@ export default function audioProcessor() {
     /* sample rate */
     view.setUint32(24, sampleRate, true);
     /* byte rate (sample rate * block align) */
-    view.setUint32(28, sampleRate * 2, true);
+    view.setUint32(28, byteRate, true);
     /* block align (channel count * bytes per sample) */
-    view.setUint16(32, numberOfOutputChannels * 2, true);
+    view.setUint16(32, numberOfOutputChannels * byteDepth, true);
     /* bits per sample */
     view.setUint16(34, 16, true);
     /* data chunk identifier */
     writeString(view, 36, "data");
     /* data chunk length */
-    view.setUint32(40, raw.length * 2, true);
+    view.setUint32(40, numberOfBytesInSingleChannel, true);
 
-    // floatTo16BitPCM(view, 44, raw);
-    encodeRAW2PCM(view, 44, raw);
+    encodeRAW2PCM(view, 44, rawDataWithFlatFloat32InSingleChannel);
 
     return view;
   };
 
-  const mergeBuffers = (rawData, rawDataLength) => {
-    let result = new Float32Array(recLength);
+  /**
+   * FLat the 2D array.
+   * @param {the float 32 array which represents the recording audio pieces in single channel} rawData2DInSingleChannel
+   */
+  const flatRawData2D = (rawData2DInSingleChannel) => {
+    let result = new Float32Array(numberOfFloat32InRawData2DInSingleChannel);
     let offset = 0;
-    for (let i = 0; i < rawData.length; i++) {
-      result.set(rawData[i], offset);
-      offset += rawData[i].length;
+
+    for (let i = 0; i < rawData2DInSingleChannel.length; i++) {
+      // Deconstruct the float 32 array and store it to result to flat the 2D array.
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray/set
+      result.set(rawData2DInSingleChannel[i], offset);
+      offset += rawData2DInSingleChannel[i].length;
     }
     return result;
   };
