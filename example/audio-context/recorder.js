@@ -23,9 +23,8 @@ startAndStopBtn.addEventListener("click", function () {
       recorder.exportBlob("wav", (_blob) => {
         blob = _blob;
         audio.src = URL.createObjectURL(blob);
-        console.log(blob);
       });
-      //   recorder.clear();
+
       break;
 
     case "Start":
@@ -33,6 +32,8 @@ startAndStopBtn.addEventListener("click", function () {
       recorder.start();
       pauseAndResumeBtn.disabled = false;
       downloadBtn.disabled = true;
+      audio.src = "";
+      recorder.clear();
       break;
   }
 });
