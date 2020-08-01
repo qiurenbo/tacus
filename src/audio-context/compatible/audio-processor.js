@@ -143,12 +143,10 @@ export default function audioProcessor() {
    */
   const encodePCM32f2PCM16i = (PCM32fInSingleChannel) => {
     let pcm;
-    let lowBoundary;
-    let upBoundary;
+    let lowBoundary = 0x8000;
+    let upBoundary = 0x7fff;
 
     pcm = new Int16Array(PCM32fInSingleChannel.length);
-    lowBoundary = 0x8000;
-    upBoundary = 0x7fff;
 
     for (var i = 0; i < PCM32fInSingleChannel.length; i++) {
       let s = Math.max(-1, Math.min(1, PCM32fInSingleChannel[i]));
@@ -160,12 +158,10 @@ export default function audioProcessor() {
 
   const encodePCM32f2PCM8i = (PCM32fInSingleChannel) => {
     let pcm;
-    let lowBoundary;
-    let upBoundary;
+    let lowBoundary = 0x80;
+    let upBoundary = 0x7f;
 
     pcm = new Int32Array(PCM32fInSingleChannel.length);
-    lowBoundary = 0x80;
-    upBoundary = 0x7f;
 
     for (var i = 0; i < PCM32fInSingleChannel.length; i++) {
       let s = Math.max(-1, Math.min(1, PCM32fInSingleChannel[i]));
