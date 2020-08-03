@@ -51,10 +51,6 @@ export class _CompatibleAudio {
         this.cb(e.data.data);
       }
     };
-    this.worker.postMessage({
-      cmd: "init",
-      config: this.config,
-    });
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
@@ -140,6 +136,11 @@ export class _CompatibleAudio {
   }
 
   start() {
+    this.worker.postMessage({
+      cmd: "init",
+      config: this.config,
+    });
+
     if (this.state === "inactive") {
       this.state = "recording";
       this.audioContext.resume();
