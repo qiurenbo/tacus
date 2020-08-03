@@ -66,8 +66,8 @@ class fast {
     this.recorder.resume(cb);
   }
 
-  export(type, cb) {
-    this.recorder.export(type, cb);
+  export(type, isBob = true, cb) {
+    this.recorder.export(type, isBob, cb);
   }
 }
 

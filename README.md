@@ -2,25 +2,30 @@
 
 - [Instruction](#instruction)
 - [Preparation](#preparation)
-  - [Audio Format](#audio-format)
-  - [Sample Rate](#sample-rate)
-  - [Bit Depth](#bit-depth)
-  - [Bit Rate](#bit-rate)
-  - [Channels](#channels)
+    - [Audio Format](#audio-format)
+    - [Sample Rate](#sample-rate)
+    - [Bit Depth](#bit-depth)
+    - [Bit Rate](#bit-rate)
+    - [Channels](#channels)
 - [Usage](#usage)
 - [MediaRecorder VS AudioContext](#mediarecorder-vs-audiocontext)
-  - [MediaRecorder](#mediarecorder)
-    - [Audio Information](#audio-information)
-    - [Reference](#reference)
-  - [AudioContext](#audiocontext)
-    - [Reference](#reference-1)
+    - [MediaRecorder](#mediarecorder)
+        - [Audio Information](#audio-information)
+    - [AudioContext](#audiocontext)
+        - [Reference](#reference)
 - [API](#api)
-  - [constructor](#constructor)
-  - [open](#open)
-  - [start](#start)
-  - [stop](#stop)
-  - [pause](#pause)
-  - [resume](#resume)
+    - [constructorconfig](#constructorconfig)
+        - [config](#config)
+    - [open](#open)
+    - [start](#start)
+    - [stop](#stop)
+    - [pause](#pause)
+    - [resume](#resume)
+    - [exporttype, blob ,callback](#exporttype-blob-callback)
+        - [type](#type)
+        - [isBlob](#isblob)
+        - [callback](#callback)
+        - [example](#example)
 
 <!-- /TOC -->
 
@@ -46,7 +51,8 @@ The number of bits used to describe each sample is called the bit depth.
 
 ## Bit Rate
 
-The number of bits transmitted per second is the bit rate. 
+The number of bits transmitted per second is the bit rate.
+
 ```
  bitRate = bitDepth * sampleRate
 ```
@@ -61,7 +67,7 @@ https://www.gearbest.com/blog/how-to/6-types-of-sound-channels-2896
 
 # Usage
 
-fast-recorder is an simple library for web recording. You only 
+fast-recorder is an simple library for web recording. You only
 have to learn six methods: open, start, pause, resume, stop, clear.
 
 See [examples](./example) for more details.
@@ -92,19 +98,12 @@ If you choose MediaRecorder as core API,something you must know before use it. T
 
 webm is an open source format that contains video compressed with VP8 or VP9 codecs and audio compressed with Vorbis or Opus codecs. The format is usually used for media content on web pages and it is supported by all the popular web-browser.
 
-
-
-### Reference
-
-[MDN-MediaStreamAudioSourceNode](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioSourceNode)
-
-[MDN-AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext)
-
 ## AudioContext
+
+Audio context can let user to control the sample rate and bit rate in recording.
 
 fast-recorder use Web Audio API by default. For
 compatibility and flexibility, fast-recorder use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
-
 
 ### Reference
 
@@ -113,58 +112,102 @@ compatibility and flexibility, fast-recorder use [ScriptProcessorNode](https://d
 [MDN-AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext)
 
 # API
-## constructor
+
+## constructor(config)
 
 Initialize a fast-recorder instance.
 
+### config
+
+```
+{
+  method: "AudioContext" | "MediaRecorder",
+  mimeType: "audio/wav",
+  bufferLen: 4096,
+  sampleRate: 16000,
+}
+```
+
+**example**:
+
 ```
 const recorder = new fast({
-    method: "MediaRecorder | AudioContext",
+    method: "AudioContext",
 });
 ```
 
+## open()
 
+Get recorder authority of browser. It will block the main method of browsers.
 
-## open
-
-Get recorder authority of browser.
+**example**:
 
 ```
 recorder.open();
 ```
 
-## start
+## start()
 
-Start Recording
+Start Recording.
+
+**example**:
 
 ```
 recorder.start();
 ```
 
-## stop
+## stop()
 
-Stop Recording
+Stop Recording.
+
+**example**:
 
 ```
-recorder.stop(callback)
+recorder.stop(cb)
 ```
-
-callback: function(url)
 
 `url` is an object url.
 
-## pause
+## pause()
 
-Pause Recording
+Pause Recording.
+
+**example**:
 
 ```
 recorder.pause();
 ```
 
-## resume
+## resume()
 
-Resume Recording
+Resume Recording.
+
+**example**:
 
 ```
 recorder.resume();
+```
+
+## export(type, blob ,callback)
+
+Export specified format audio.
+
+### type
+
+'wav'|'pcm'
+
+### isBlob
+
+true | false
+
+If isBlob is true, result in callback is blob, else is binary.
+
+### callback
+
+function(rs). Get an rs object. May be blob or binary depended on blob options above.
+
+### example
+
+```
+recorder.export('wav',cb);
 ```

@@ -36,7 +36,7 @@ export default function audioProcessor() {
         break;
       case "export":
         if (event.data.type === "wav") {
-          exportWAV();
+          exportWAV(event.data.isBlob);
         }
         break;
       case "clear":
@@ -48,7 +48,7 @@ export default function audioProcessor() {
     }
   };
 
-  const exportWAV = () => {
+  const exportWAV = (isBlob = true) => {
     let buffers = [];
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
       buffers.push(
@@ -67,9 +67,13 @@ export default function audioProcessor() {
       numberOfOutputChannels,
       bitDepth
     );
-    const blob = new Blob([wav], { type: "audio/wav" });
 
-    postMessage({ cmd: "exportWAV", blob });
+    if (isBlob) {
+      const blob = new Blob([wav], { type: "audio/wav" });
+      postMessage({ cmd: "exportWAV", data: blob });
+    } else {
+      postMessage({ cmd: "exportWAV", data: wav });
+    }
   };
 
   const initialize = (config) => {

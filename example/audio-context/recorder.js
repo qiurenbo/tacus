@@ -2,6 +2,7 @@ const startAndStopBtn = document.getElementById("start-stop");
 const pauseAndResumeBtn = document.getElementById("pause-resume");
 const downloadBtn = document.getElementById("download");
 const audio = document.getElementById("audio");
+
 const recorder = new fast({
   method: "AudioContext",
   mimeType: "audio/wav",
@@ -10,6 +11,7 @@ const recorder = new fast({
 });
 
 let blob;
+let binary;
 recorder.open();
 
 startAndStopBtn.addEventListener("click", function () {
@@ -20,9 +22,12 @@ startAndStopBtn.addEventListener("click", function () {
       recorder.stop();
       pauseAndResumeBtn.disabled = true;
       downloadBtn.disabled = false;
-      recorder.export("wav", (_blob) => {
+
+      recorder.export("wav", true, async (_blob) => {
         blob = _blob;
         audio.src = URL.createObjectURL(blob);
+        const buffer = await blob.arrayBuffer();
+        console.log(buffer);
       });
 
       break;
@@ -32,6 +37,7 @@ startAndStopBtn.addEventListener("click", function () {
       recorder.start();
       pauseAndResumeBtn.disabled = false;
       downloadBtn.disabled = true;
+
       audio.src = "";
       recorder.clear();
       break;

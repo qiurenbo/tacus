@@ -47,10 +47,8 @@ export class _CompatibleAudio {
     // console.log(this.config);
     this.worker = this.createWorker(audioProcessor);
     this.worker.onmessage = (e) => {
-      console.log(e.data);
-
       if (typeof this.cb == "function") {
-        this.cb(e.data.blob);
+        this.cb(e.data.data);
       }
     };
     this.worker.postMessage({
@@ -178,11 +176,12 @@ export class _CompatibleAudio {
     }
   }
 
-  export(type, cb) {
+  export(type, isBlob, cb) {
     this.cb = cb;
     this.worker.postMessage({
       cmd: "export",
       type,
+      isBlob,
     });
   }
 
