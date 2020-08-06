@@ -24,10 +24,11 @@ export default function audioProcessor() {
 
   // onmessage must be a global variable
   self.onmessage = (event) => {
-    // console.log("i am worker, receive:" + event.data.cmd);
+    console.log("i am worker, receive:" + event.data.cmd);
+    console.log("numberOf32fInSingleChannel:" + numberOf32fInSingleChannel);
     switch (event.data.cmd) {
       case "init":
-        initialize(event.data.config);
+        init(event.data.config);
         break;
       case "record":
         fillPCM32fSamples(event.data.buffer);
@@ -35,12 +36,9 @@ export default function audioProcessor() {
       case "stop":
         break;
       case "export":
-        if (event.data.type === "wav") {
+        if (event.data.audioType === "wav") {
           exportWAV(event.data.isBlob);
         }
-        break;
-      case "clear":
-        clear();
         break;
       case "release":
         self.close();
@@ -61,12 +59,7 @@ export default function audioProcessor() {
 
     // Now only support single channel output
     const PCM32fInSingleChannel = buffers[0];
-    const wav = encodePCM32f2WAV(
-      PCM32fInSingleChannel,
-      sampleRate,
-      numberOfOutputChannels,
-      bitDepth
-    );
+    const wav = encodePCM32f2WAV(PCM32fInSingleChannel);
 
     if (isBlob) {
       const blob = new Blob([wav], { type: "audio/wav" });
@@ -76,12 +69,12 @@ export default function audioProcessor() {
     }
   };
 
-  const initialize = (config) => {
+  const init = (config) => {
     if (config.sampleRate) {
       sampleRate = config.sampleRate;
     }
     if (config.bitDepth) {
-      bitDepth = config.bitDepth;
+      bitDepth = +config.bitDepth;
     }
 
     if (config.numberOfOutputChannels) {
@@ -91,6 +84,7 @@ export default function audioProcessor() {
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
       PCM32fSamplesInMultipleChannels[channel] = [];
     }
+    numberOf32fInSingleChannel = 0;
   };
 
   const fillPCM32fSamples = (pcmFloatPiece) => {
@@ -101,14 +95,6 @@ export default function audioProcessor() {
     }
 
     numberOf32fInSingleChannel += pcmFloatPiece[0].length;
-    // console.log(numberOf32fInSingleChannel);
-  };
-
-  const clear = () => {
-    sampleRate = null;
-    numberOfOutputChannels = 1;
-    PCM32fSamplesInMultipleChannels = [];
-    numberOf32fInSingleChannel = 0;
   };
 
   /**
@@ -128,10 +114,12 @@ export default function audioProcessor() {
    * we can get PCM audio
    */
   const writePCMData = (output, offset, PCM32fInSingleChannel) => {
+    console.log(bitDepth === 8);
     if (bitDepth === 16) {
       pcm = encodePCM32f2PCM16i(PCM32fInSingleChannel);
       writePCM16iToWAV(output, offset, pcm);
     } else if (bitDepth === 8) {
+      // https://stackoverflow.com/questions/25352195/noise-after-converting-32-bit-float-pcm-to-unsigned-8-bit
       pcm = encodePCM32f2PCM8i(PCM32fInSingleChannel);
       write8iToWAVData(output, offset, pcm);
     } else {
@@ -180,14 +168,14 @@ export default function audioProcessor() {
   };
 
   const write8iToWAVData = (output, offset, pcm) => {
-    for (var i = 0; i < pcm.length; i++, offset += 2) {
+    for (var i = 0; i < pcm.length; i++, offset += 1) {
       output.setInt8(offset, pcm[i], true);
     }
   };
 
   const encodePCM32f2WAV = (PCM32fInSingleChannel) => {
     // console.log(raw, sampleRate, numberOfOutputChannels, bitDepth);
-
+    console.log("bitDepth:" + bitDepth);
     const byteDepth = bitDepth / 8;
     const byteRate = sampleRate * byteDepth;
     const numberOfBytesInSingleChannel =
@@ -237,7 +225,7 @@ export default function audioProcessor() {
     let offset = 0;
 
     for (let i = 0; i < pcmFloat2DInSingleChannel.length; i++) {
-      // Deconstruct the float 32 array and store it to result to flat the 2D array.
+      // Deconstruct the float 32 array and store it to the 2D array.
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray/set
       result.set(pcmFloat2DInSingleChannel[i], offset);
       offset += pcmFloat2DInSingleChannel[i].length;
