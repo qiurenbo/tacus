@@ -33,12 +33,11 @@ export default class SelfWorker {
     });
   }
 
-  export(audioType, isBlob, cb) {
+  export(audioType, cb) {
     this.cb = cb;
     this.worker.postMessage({
       cmd: "export",
       audioType,
-      isBlob,
     });
   }
 

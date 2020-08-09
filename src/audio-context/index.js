@@ -3,7 +3,7 @@ import SelfWorker from "./worker";
 /**
  * Reference by https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
  */
-export class _CompatibleAudio {
+export class AudioContextRecorder {
   // audio context
   context = null;
 
@@ -39,7 +39,6 @@ export class _CompatibleAudio {
 
   config = {
     method: "AudioContext",
-    mimeType: "audio/wav",
 
     // same as https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createScriptProcessor
     // 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384
@@ -56,7 +55,6 @@ export class _CompatibleAudio {
   };
 
   constructor(config = null) {
-    console.log(config);
     if (config) {
       this.setConfig(config);
     }
@@ -86,6 +84,7 @@ export class _CompatibleAudio {
 
           this.stream = stream;
 
+          // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
           window.AudioContext =
             window.AudioContext || window.webkitAudioContext;
 
@@ -166,9 +165,10 @@ export class _CompatibleAudio {
       // https://stackoverflow.com/questions/26670677/remove-red-icon-after-recording-has-stopped/26671315
       if (this.stream && this.stream.getTracks) {
         this.stream.getTracks().forEach((track) => track.stop());
-        // this.stream.close();
         this.stream = null;
       }
+
+      this.context && this.context.close();
     }
   }
 
@@ -186,10 +186,8 @@ export class _CompatibleAudio {
     }
   }
 
-  export(audioType, isBlob, cb) {
-    console.log(audioType);
-    console.log(isBlob);
-    this.worker.export(audioType, isBlob, cb);
+  export(audioType, cb) {
+    this.worker.export(audioType, cb);
   }
 
   release() {
@@ -199,7 +197,6 @@ export class _CompatibleAudio {
 
   setConfig(config) {
     Object.assign(this.config, config);
-    console.log(this.config);
   }
 
   /**

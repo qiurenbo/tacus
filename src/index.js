@@ -1,14 +1,14 @@
 "use strict";
-import { _CompatibleAudio } from "./audio-context";
+import { AudioContextRecorder } from "./audio-context";
 
-class fast {
+class Fast {
   recorder;
 
   constructor(config) {
-    this.recorder = new _CompatibleAudio(config);
+    this.recorder = new AudioContextRecorder(config);
   }
 
-  setConfig() {
+  setConfig(config) {
     this.recorder.setConfig(config);
   }
 
@@ -24,17 +24,13 @@ class fast {
     this.recorder.pause();
   }
 
-  clear() {
-    this.recorder.clear();
-  }
-
   resume() {
     this.recorder.resume();
   }
 
-  export(type, isBob = true, cb) {
-    this.recorder.export(type, isBob, cb);
+  export(audioType, cb) {
+    this.recorder.export(audioType, cb);
   }
 }
 
-export default fast;
+export default Fast;

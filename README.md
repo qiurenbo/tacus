@@ -2,30 +2,29 @@
 
 - [Instruction](#instruction)
 - [Preparation](#preparation)
-    - [Audio Format](#audio-format)
-    - [Sample Rate](#sample-rate)
-    - [Bit Depth](#bit-depth)
-    - [Bit Rate](#bit-rate)
-    - [Channels](#channels)
+  - [Audio Format](#audio-format)
+  - [Sample Rate](#sample-rate)
+  - [Bit Depth](#bit-depth)
+  - [Bit Rate](#bit-rate)
+  - [Channels](#channels)
 - [Usage](#usage)
 - [MediaRecorder VS AudioContext](#mediarecorder-vs-audiocontext)
-    - [MediaRecorder](#mediarecorder)
-        - [Audio Information](#audio-information)
-    - [AudioContext](#audiocontext)
-        - [Reference](#reference)
+  - [MediaRecorder](#mediarecorder)
+    - [Audio Information](#audio-information)
+  - [AudioContext](#audiocontext)
+    - [Reference](#reference)
 - [API](#api)
-    - [constructorconfig](#constructorconfig)
-        - [config](#config)
-    - [open](#open)
-    - [start](#start)
-    - [stop](#stop)
-    - [pause](#pause)
-    - [resume](#resume)
-    - [exporttype, blob ,callback](#exporttype-blob-callback)
-        - [type](#type)
-        - [isBlob](#isblob)
-        - [callback](#callback)
-        - [example](#example)
+  - [constructor(config)](#constructorconfig)
+    - [config](#config)
+  - [open()](#open)
+  - [start()](#start)
+  - [stop()](#stop)
+  - [pause()](#pause)
+  - [resume()](#resume)
+  - [export(audioType, blob ,callback)](#exportaudiotype-blob-callback)
+    - [audioType](#audiotype)
+    - [isBlob](#isblob)
+    - [callback](#callback)
 
 <!-- /TOC -->
 
@@ -122,8 +121,8 @@ Initialize a fast-recorder instance.
 ```
 {
   method: "AudioContext" | "MediaRecorder",
-  mimeType: "audio/wav",
-  bufferLen: 4096,
+  type: "wav",
+  bufferSize: 4096,
   sampleRate: 16000,
 }
 ```
@@ -188,11 +187,11 @@ Resume Recording.
 recorder.resume();
 ```
 
-## export(type, blob ,callback)
+## export(audioType, blob ,callback)
 
 Export specified format audio.
 
-### type
+### audioType
 
 'wav'|'pcm'
 
@@ -206,7 +205,7 @@ If isBlob is true, result in callback is blob, else is binary.
 
 function(rs). Get an rs object. May be blob or binary depended on blob options above.
 
-### example
+**example**
 
 ```
 recorder.export('wav',cb);

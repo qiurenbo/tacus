@@ -6,12 +6,11 @@ const audio = document.getElementById("audio");
 const debugDIV = document.getElementById("debug");
 let config = {
   method: "AudioContext",
-  mimeType: "audio/wav",
   bufferSize: 4096,
   sampleRate: 16000,
   bitDepth: 16,
 };
-let recorder = new fast();
+let recorder = new Fast();
 
 let blob;
 let binary;
@@ -26,7 +25,7 @@ function onStart() {
       recognitionBtn.disabled = false;
       downloadBtn.disabled = false;
 
-      recorder.export("wav", true, async (_blob) => {
+      recorder.export("wav", async (_blob) => {
         blob = _blob;
         audio.src = URL.createObjectURL(blob);
         const buffer = await blob.arrayBuffer();
@@ -82,7 +81,7 @@ function onRecognize() {
         );
       })
       .catch(function (error) {
-        console.log(error);
+        throw error;
       });
   });
 }

@@ -24,8 +24,8 @@ export default function audioProcessor() {
 
   // onmessage must be a global variable
   self.onmessage = (event) => {
-    console.log("i am worker, receive:" + event.data.cmd);
-    console.log("numberOf32fInSingleChannel:" + numberOf32fInSingleChannel);
+    // console.log("i am worker, receive:" + event.data.cmd);
+    // console.log("numberOf32fInSingleChannel:" + numberOf32fInSingleChannel);
     switch (event.data.cmd) {
       case "init":
         init(event.data.config);
@@ -37,7 +37,7 @@ export default function audioProcessor() {
         break;
       case "export":
         if (event.data.audioType === "wav") {
-          exportWAV(event.data.isBlob);
+          exportWAV();
         }
         break;
       case "release":
@@ -46,7 +46,7 @@ export default function audioProcessor() {
     }
   };
 
-  const exportWAV = (isBlob = true) => {
+  const exportWAV = () => {
     let buffers = [];
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
       buffers.push(
@@ -61,12 +61,8 @@ export default function audioProcessor() {
     const PCM32fInSingleChannel = buffers[0];
     const wav = encodePCM32f2WAV(PCM32fInSingleChannel);
 
-    if (isBlob) {
-      const blob = new Blob([wav], { type: "audio/wav" });
-      postMessage({ cmd: "exportWAV", data: blob });
-    } else {
-      postMessage({ cmd: "exportWAV", data: wav });
-    }
+    const blob = new Blob([wav], { type: "audio/wav" });
+    postMessage({ cmd: "exportWAV", data: blob });
   };
 
   const init = (config) => {
@@ -114,7 +110,6 @@ export default function audioProcessor() {
    * we can get PCM audio
    */
   const writePCMData = (output, offset, PCM32fInSingleChannel) => {
-    console.log(bitDepth === 8);
     if (bitDepth === 16) {
       pcm = encodePCM32f2PCM16i(PCM32fInSingleChannel);
       writePCM16iToWAV(output, offset, pcm);
@@ -174,8 +169,6 @@ export default function audioProcessor() {
   };
 
   const encodePCM32f2WAV = (PCM32fInSingleChannel) => {
-    // console.log(raw, sampleRate, numberOfOutputChannels, bitDepth);
-    console.log("bitDepth:" + bitDepth);
     const byteDepth = bitDepth / 8;
     const byteRate = sampleRate * byteDepth;
     const numberOfBytesInSingleChannel =
