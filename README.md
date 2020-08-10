@@ -1,10 +1,12 @@
 # Psittacus
 
 [![npm](https://badgen.net/npm/v/psittacus)](https://www.npmjs.com/package/psittacus)
+[![gzip size](https://badgen.net/badgesize/gzip/https://cdn.jsdelivr.net/npm/psittacus@0.1.1/dist/psittacus.min.js)](https://cdn.jsdelivr.net/npm/psittacus@0.1.1/dist/psittacus.min.js)
 [![Build Status](https://travis-ci.com/qiurenbo/psittacus.svg?branch=master)](https://travis-ci.com/qiurenbo/psittacus)
 [![install size](https://packagephobia.com/badge?p=psittacus@0.1.1)](https://packagephobia.com/result?p=psittacus@0.1.1)
 [![dep](https://badgen.net/david/dep/qiurenbo/psittacus?label=deps)](https://david-dm.org/qiurenbo/psittacus)
 [![downloads](https://badgen.net/npm/types/psittacus)](https://www.npmjs.com/package/psittacuss)
+[![](https://data.jsdelivr.com/v1/package/npm/psittacus/badge)](https://www.jsdelivr.com/package/npm/psittacus)
 
 <!-- TOC -->
 
@@ -27,13 +29,13 @@
   - [Use script](#use-script)
   - [Usage](#usage)
 - [API](#api)
-  - [constructor(config)](#constructorconfig)
+  - [constructorconfig](#constructorconfig)
     - [config](#config)
-  - [start()](#start)
-  - [stop()](#stop)
-  - [pause()](#pause)
-  - [resume()](#resume)
-  - [export(audioType, callback)](#exportaudiotype-callback)
+  - [start](#start)
+  - [stop](#stop)
+  - [pause](#pause)
+  - [resume](#resume)
+  - [exportaudioType, callback](#exportaudiotype-callback)
     - [audioType](#audiotype)
     - [callback](#callback)
 
