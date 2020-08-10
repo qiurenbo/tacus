@@ -7,16 +7,16 @@
   - [Bit Depth](#bit-depth)
   - [Bit Rate](#bit-rate)
   - [Channels](#channels)
-- [Usage](#usage)
 - [MediaRecorder VS AudioContext](#mediarecorder-vs-audiocontext)
   - [MediaRecorder](#mediarecorder)
     - [Audio Information](#audio-information)
   - [AudioContext](#audiocontext)
     - [Reference](#reference)
+- [Usage](#usage)
+  - [Crash Course](#crash-course)
 - [API](#api)
   - [constructor(config)](#constructorconfig)
     - [config](#config)
-  - [open()](#open)
   - [start()](#start)
   - [stop()](#stop)
   - [pause()](#pause)
@@ -63,16 +63,9 @@ Sound Channel refers to the independent audio signal which is collected or playb
 
 https://www.gearbest.com/blog/how-to/6-types-of-sound-channels-2896
 
-# Usage
-
-psittacus is an simple library for web recording. You only
-have to learn six methods: open, start, pause, resume, stop, clear.
-
-See [examples](./example) for more details.
-
 # MediaRecorder VS AudioContext
 
-With psittacus, you can choose MediaRecorder or AudioContext as a core recorder api. By default, psittacus use AudioContext as default. This is because. :point_down:
+By default, psittacus use AudioContext as default. This is because. :point_down:
 
 ## MediaRecorder
 
@@ -86,7 +79,7 @@ With psittacus, you can choose MediaRecorder or AudioContext as a core recorder 
 
 ### Audio Information
 
-If you choose MediaRecorder as core API,something you must know before use it. There is a table made by [Remus Negrota](https://blog.addpipe.com/mediarecorder-api/)
+There is a table made by [Remus Negrota](https://blog.addpipe.com/mediarecorder-api/).
 
 | name        | CHROME 49+ | CHROME 52+ | FIREFOX 30 AND UP |
 | ----------- | ---------- | ---------- | ----------------- |
@@ -99,15 +92,43 @@ webm is an open source format that contains video compressed with VP8 or VP9 cod
 ## AudioContext
 
 Audio context can let user to control the sample rate and bit rate in recording.
-
-psittacus use Web Audio API by default. For
-compatibility and flexibility, psittacus use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
+For compatibility and flexibility, psittacus use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
 
 ### Reference
 
 [MDN-MediaStreamAudioSourceNode](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioSourceNode)
 
 [MDN-AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext)
+
+# Usage
+
+psittacus is an simple library for web recording. You only
+have to learn six methods: open, start, pause, resume, stop, clear.
+
+## Crash Course
+
+ES6
+
+```
+   import Psittacus from 'Psittacus'
+
+   let recorder = new Psittacus();
+   recorder.start();
+
+   recorder.stop();
+
+   recorder.export('wav',async (blob)=>{
+       const url = URL.createObjectURL(object);
+
+       // Use <audio></audio> to play it.
+       audio.src = url;
+
+       // Get binary data of audio
+       const binary = await blob.arrayBuffer()
+   })
+```
+
+See [examples](./example) for more details.
 
 # API
 
@@ -119,7 +140,7 @@ Initialize a psittacus instance.
 
 ```
 {
-  method: "AudioContext" | "MediaRecorder",
+  method: "AudioContext"
   type: "wav",
   bufferSize: 4096,
   sampleRate: 16000,
@@ -132,16 +153,6 @@ Initialize a psittacus instance.
 const recorder = new fast({
     method: "AudioContext",
 });
-```
-
-## open()
-
-Get recorder authority of browser. It will block the main method of browsers.
-
-**example**:
-
-```
-recorder.open();
 ```
 
 ## start()
@@ -193,8 +204,6 @@ Export specified format audio.
 ### audioType
 
 'wav'|'pcm'
-
-If isBlob is true, result in callback is blob, else is binary.
 
 ### callback
 
