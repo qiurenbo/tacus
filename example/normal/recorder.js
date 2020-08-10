@@ -10,7 +10,7 @@ let config = {
   sampleRate: 16000,
   bitDepth: 16,
 };
-let recorder = new Fast();
+let recorder = new Psittacus();
 
 let blob;
 let binary;

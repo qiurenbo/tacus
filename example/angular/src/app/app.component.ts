@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import Fast from "../../../../dist/index";
+import Psittacus from "../../../../dist/index";
 
 @Component({
   selector: "app-root",
@@ -16,7 +16,7 @@ export class AppComponent {
     bitDepth: 16,
   };
 
-  fast = new Fast(this.config);
+  fast = new Psittacus(this.config);
   startOrStop = "Start";
 
   onStart() {

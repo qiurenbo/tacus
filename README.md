@@ -2,29 +2,28 @@
 
 - [Instruction](#instruction)
 - [Preparation](#preparation)
-  - [Audio Format](#audio-format)
-  - [Sample Rate](#sample-rate)
-  - [Bit Depth](#bit-depth)
-  - [Bit Rate](#bit-rate)
-  - [Channels](#channels)
+    - [Audio Format](#audio-format)
+    - [Sample Rate](#sample-rate)
+    - [Bit Depth](#bit-depth)
+    - [Bit Rate](#bit-rate)
+    - [Channels](#channels)
 - [Usage](#usage)
 - [MediaRecorder VS AudioContext](#mediarecorder-vs-audiocontext)
-  - [MediaRecorder](#mediarecorder)
-    - [Audio Information](#audio-information)
-  - [AudioContext](#audiocontext)
-    - [Reference](#reference)
+    - [MediaRecorder](#mediarecorder)
+        - [Audio Information](#audio-information)
+    - [AudioContext](#audiocontext)
+        - [Reference](#reference)
 - [API](#api)
-  - [constructor(config)](#constructorconfig)
-    - [config](#config)
-  - [open()](#open)
-  - [start()](#start)
-  - [stop()](#stop)
-  - [pause()](#pause)
-  - [resume()](#resume)
-  - [export(audioType, blob ,callback)](#exportaudiotype-blob-callback)
-    - [audioType](#audiotype)
-    - [isBlob](#isblob)
-    - [callback](#callback)
+    - [constructorconfig](#constructorconfig)
+        - [config](#config)
+    - [open](#open)
+    - [start](#start)
+    - [stop](#stop)
+    - [pause](#pause)
+    - [resume](#resume)
+    - [exportaudioType, callback](#exportaudiotype-callback)
+        - [audioType](#audiotype)
+        - [callback](#callback)
 
 <!-- /TOC -->
 
@@ -187,7 +186,7 @@ Resume Recording.
 recorder.resume();
 ```
 
-## export(audioType, blob ,callback)
+## export(audioType, callback)
 
 Export specified format audio.
 
@@ -195,15 +194,12 @@ Export specified format audio.
 
 'wav'|'pcm'
 
-### isBlob
-
-true | false
 
 If isBlob is true, result in callback is blob, else is binary.
 
 ### callback
 
-function(rs). Get an rs object. May be blob or binary depended on blob options above.
+function(blob). Get a blob object.
 
 **example**
 

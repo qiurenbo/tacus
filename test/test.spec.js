@@ -1,4 +1,4 @@
-import Fast from "index";
+import Psittacus from "index";
 
 describe("export wav should work", () => {
   it("wav header should be 44 bytes", (done) => {
@@ -9,7 +9,7 @@ describe("export wav should work", () => {
       bitDepth: 16,
     };
 
-    let recorder = new Fast(config);
+    let recorder = new Psittacus(config);
 
     recorder.start();
 
@@ -29,7 +29,7 @@ describe("export wav should work", () => {
       bitDepth: 16,
     };
 
-    let recorder = new Fast(config);
+    let recorder = new Psittacus(config);
 
     recorder.start();
 
@@ -44,7 +44,7 @@ describe("export wav should work", () => {
 
     config.sampleRate = 8000;
 
-    recorder = new Fast(config);
+    recorder = new Psittacus(config);
 
     recorder.start();
 
@@ -66,7 +66,7 @@ describe("export wav should work", () => {
       bitDepth: 16,
     };
 
-    let recorder = new Fast(config);
+    let recorder = new Psittacus(config);
 
     recorder.start();
 
@@ -81,7 +81,7 @@ describe("export wav should work", () => {
 
     config.bitDepth = 8;
 
-    recorder = new Fast(config);
+    recorder = new Psittacus(config);
 
     recorder.start();
 

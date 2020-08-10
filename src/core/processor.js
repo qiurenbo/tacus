@@ -2,7 +2,7 @@
  * AudioProcessor is a web worker for parse raw recording data.
  * It is used as a inline worker.
  */
-export default function audioProcessor() {
+export default function Processor() {
   let sampleRate = 16000;
 
   let numberOfOutputChannels = 1;
