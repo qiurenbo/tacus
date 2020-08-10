@@ -16,21 +16,21 @@ export class AppComponent {
     bitDepth: 16,
   };
 
-  fast = new Psittacus(this.config);
+  recorder = new Psittacus(this.config);
   startOrStop = "Start";
 
   onStart() {
     if (this.startOrStop === "Start") {
       this.startOrStop = "Stop";
-      this.fast.start();
+      this.recorder.start();
     } else {
       this.startOrStop = "Start";
-      this.fast.stop();
+      this.recorder.stop();
     }
   }
 
   onDownload() {
-    this.fast.export("wav", (blob) => {
+    this.recorder.export("wav", (blob) => {
       const downloadEl = document.createElement("a");
       downloadEl.innerHTML = "download";
       downloadEl.download = "audio.wav";

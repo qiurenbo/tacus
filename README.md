@@ -1,6 +1,10 @@
 # Psittacus
 
+[![npm](https://badgen.net/npm/v/psittacus)](https://www.npmjs.com/package/psittacus)
 [![Build Status](https://travis-ci.com/qiurenbo/psittacus.svg?branch=master)](https://travis-ci.com/qiurenbo/psittacus)
+[![install size](https://packagephobia.com/badge?p=psittacus@0.1.1)](https://packagephobia.com/result?p=psittacus@0.1.1)
+[![dep](https://badgen.net/david/dep/qiurenbo/psittacus?label=deps)](https://david-dm.org/qiurenbo/psittacus)
+[![downloads](https://badgen.net/npm/types/psittacus)](https://www.npmjs.com/package/psittacuss)
 
 <!-- TOC -->
 
@@ -17,8 +21,11 @@
     - [Audio Information](#audio-information)
   - [AudioContext](#audiocontext)
     - [Reference](#reference)
-- [Usage](#usage)
-  - [Crash Course](#crash-course)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+  - [Use npm](#use-npm)
+  - [Use script](#use-script)
+  - [Usage](#usage)
 - [API](#api)
   - [constructor(config)](#constructorconfig)
     - [config](#config)
@@ -105,32 +112,51 @@ For compatibility and flexibility, psittacus use [ScriptProcessorNode](https://d
 
 [MDN-AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext)
 
-# Usage
+# Quick Start
 
 psittacus is an simple library for web recording. You only
 have to learn six methods: open, start, pause, resume, stop, clear.
 
-## Crash Course
+# Installation
 
-ES6
+## Use npm
 
 ```
-   import Psittacus from 'Psittacus'
+npm i psittacus
+```
 
-   let recorder = new Psittacus();
-   recorder.start();
+import it as ES6 module
 
-   recorder.stop();
+```
+import Psittacus from 'psittacus'
+```
 
-   recorder.export('wav',async (blob)=>{
-       const url = URL.createObjectURL(object);
+## Use script
 
-       // Use <audio></audio> to play it.
-       audio.src = url;
+```
+<script src="/path/to/psittacus.js"></script>
+```
 
-       // Get binary data of audio
-       const binary = await blob.arrayBuffer()
-   })
+You can download the latest version from [here](https://github.com/qiurenbo/psittacus/releases).
+
+## Usage
+
+```
+let parrot = new Psittacus();
+
+parrot.start();
+
+parrot.stop();
+
+parrot.export('wav',async (blob)=>{
+    const url = URL.createObjectURL(object);
+
+    // Use <audio></audio> to play it.
+    audio.src = url;
+
+    // Get binary data of audio
+    const binary = await blob.arrayBuffer()
+})
 ```
 
 See [examples](./example) for more details.
