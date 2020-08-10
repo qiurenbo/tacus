@@ -1,6 +1,6 @@
 {
   "name": "psittacus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "psittacus is a simple library to recorder audio in browser",
   "main": "dist/psittacus.js",
   "types": "dist/psittacus.d.ts",
