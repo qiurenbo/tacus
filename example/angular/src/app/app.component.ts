@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import Psittacus from "../../../../dist/index";
+import Psittacus from "../../../../dist/psittacus";
 
 @Component({
   selector: "app-root",

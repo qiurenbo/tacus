@@ -1,7 +1,10 @@
+# Psittacus
+
 [![Build Status](https://travis-ci.com/qiurenbo/psittacus.svg?branch=master)](https://travis-ci.com/qiurenbo/psittacus)
 
 <!-- TOC -->
 
+- [Psittacus](#psittacus)
 - [Instruction](#instruction)
 - [Preparation](#preparation)
   - [Audio Format](#audio-format)
