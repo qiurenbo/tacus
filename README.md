@@ -2,34 +2,34 @@
 
 - [Instruction](#instruction)
 - [Preparation](#preparation)
-    - [Audio Format](#audio-format)
-    - [Sample Rate](#sample-rate)
-    - [Bit Depth](#bit-depth)
-    - [Bit Rate](#bit-rate)
-    - [Channels](#channels)
+  - [Audio Format](#audio-format)
+  - [Sample Rate](#sample-rate)
+  - [Bit Depth](#bit-depth)
+  - [Bit Rate](#bit-rate)
+  - [Channels](#channels)
 - [Usage](#usage)
 - [MediaRecorder VS AudioContext](#mediarecorder-vs-audiocontext)
-    - [MediaRecorder](#mediarecorder)
-        - [Audio Information](#audio-information)
-    - [AudioContext](#audiocontext)
-        - [Reference](#reference)
+  - [MediaRecorder](#mediarecorder)
+    - [Audio Information](#audio-information)
+  - [AudioContext](#audiocontext)
+    - [Reference](#reference)
 - [API](#api)
-    - [constructorconfig](#constructorconfig)
-        - [config](#config)
-    - [open](#open)
-    - [start](#start)
-    - [stop](#stop)
-    - [pause](#pause)
-    - [resume](#resume)
-    - [exportaudioType, callback](#exportaudiotype-callback)
-        - [audioType](#audiotype)
-        - [callback](#callback)
+  - [constructor(config)](#constructorconfig)
+    - [config](#config)
+  - [open()](#open)
+  - [start()](#start)
+  - [stop()](#stop)
+  - [pause()](#pause)
+  - [resume()](#resume)
+  - [export(audioType, callback)](#exportaudiotype-callback)
+    - [audioType](#audiotype)
+    - [callback](#callback)
 
 <!-- /TOC -->
 
 # Instruction
 
-fast-recorder is a simple library to recorder audio in browser.
+psittacus is a simple library to recorder audio in browser.
 
 # Preparation
 
@@ -65,14 +65,14 @@ https://www.gearbest.com/blog/how-to/6-types-of-sound-channels-2896
 
 # Usage
 
-fast-recorder is an simple library for web recording. You only
+psittacus is an simple library for web recording. You only
 have to learn six methods: open, start, pause, resume, stop, clear.
 
 See [examples](./example) for more details.
 
 # MediaRecorder VS AudioContext
 
-With fast-recorder, you can choose MediaRecorder or AudioContext as a core recorder api. By default, fast-recorder use AudioContext as default. This is because. :point_down:
+With psittacus, you can choose MediaRecorder or AudioContext as a core recorder api. By default, psittacus use AudioContext as default. This is because. :point_down:
 
 ## MediaRecorder
 
@@ -100,8 +100,8 @@ webm is an open source format that contains video compressed with VP8 or VP9 cod
 
 Audio context can let user to control the sample rate and bit rate in recording.
 
-fast-recorder use Web Audio API by default. For
-compatibility and flexibility, fast-recorder use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
+psittacus use Web Audio API by default. For
+compatibility and flexibility, psittacus use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
 
 ### Reference
 
@@ -113,7 +113,7 @@ compatibility and flexibility, fast-recorder use [ScriptProcessorNode](https://d
 
 ## constructor(config)
 
-Initialize a fast-recorder instance.
+Initialize a psittacus instance.
 
 ### config
 
@@ -193,7 +193,6 @@ Export specified format audio.
 ### audioType
 
 'wav'|'pcm'
-
 
 If isBlob is true, result in callback is blob, else is binary.
 
