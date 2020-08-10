@@ -1,4 +1,4 @@
-import Psittacus from "index";
+import Psittacus from "psittacus";
 
 describe("export wav should work", () => {
   it("wav header should be 44 bytes", (done) => {

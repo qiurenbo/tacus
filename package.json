@@ -14,7 +14,7 @@
     "dev": "nodemon --config nodemon.json",
     "build:dev": "webpack --config webpack-dev.config.js",
     "build:prod": "webpack --config webpack-prod.config.js",
-    "test": "karma start karma.conf.js",
+    "test": "npm run build:prod && karma start karma.conf.js",
     "publish": "npm run build:prod && np"
   },
   "repository": {
