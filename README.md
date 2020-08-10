@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/qiurenbo/psittacus.svg?branch=master)](https://travis-ci.com/qiurenbo/psittacus)
+
 <!-- TOC -->
 
 - [Instruction](#instruction)
