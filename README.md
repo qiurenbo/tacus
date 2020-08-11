@@ -27,15 +27,17 @@
 - [Installation](#installation)
   - [Use npm](#use-npm)
   - [Use script](#use-script)
+    - [Local](#local)
+    - [CDN](#cdn)
   - [Usage](#usage)
 - [API](#api)
-  - [constructorconfig](#constructorconfig)
+  - [constructor(config)](#constructorconfig)
     - [config](#config)
-  - [start](#start)
-  - [stop](#stop)
-  - [pause](#pause)
-  - [resume](#resume)
-  - [exportaudioType, callback](#exportaudiotype-callback)
+  - [start()](#start)
+  - [stop()](#stop)
+  - [pause()](#pause)
+  - [resume()](#resume)
+  - [export(audioType, callback)](#exportaudiotype-callback)
     - [audioType](#audiotype)
     - [callback](#callback)
 
@@ -135,11 +137,19 @@ import Psittacus from 'psittacus'
 
 ## Use script
 
+### Local
+
 ```
 <script src="/path/to/psittacus.js"></script>
 ```
 
 You can download the latest version from [here](https://github.com/qiurenbo/psittacus/releases).
+
+### CDN
+
+```
+<script src="https://cdn.jsdelivr.net/npm/psittacus@0.1.1/dist/psittacus.min.js"></script>
+```
 
 ## Usage
 
