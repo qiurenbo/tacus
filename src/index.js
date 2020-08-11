@@ -190,11 +190,6 @@ export class Psittacus {
     this.worker.export(audioType, cb);
   }
 
-  release() {
-    this.worker.release();
-    this.context.close();
-  }
-
   setConfig(config) {
     Object.assign(this.config, config);
   }

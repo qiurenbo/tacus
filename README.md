@@ -31,15 +31,12 @@
     - [CDN](#cdn)
   - [Usage](#usage)
 - [API](#api)
-  - [constructor(config)](#constructorconfig)
-    - [config](#config)
+  - [constructor([config])](#constructorconfig)
   - [start()](#start)
   - [stop()](#stop)
   - [pause()](#pause)
   - [resume()](#resume)
   - [export(audioType, callback)](#exportaudiotype-callback)
-    - [audioType](#audiotype)
-    - [callback](#callback)
 
 <!-- /TOC -->
 
@@ -154,13 +151,13 @@ You can download the latest version from [here](https://github.com/qiurenbo/psit
 ## Usage
 
 ```
-let parrot = new Psittacus();
+let psittacus = new Psittacus();
 
-parrot.start();
+psittacus.start();
 
-parrot.stop();
+psittacus.stop();
 
-parrot.export('wav',async (blob)=>{
+psittacus.export('wav',async (blob)=>{
     const url = URL.createObjectURL(object);
 
     // Use <audio></audio> to play it.
@@ -175,27 +172,23 @@ See [examples](./example) for more details.
 
 # API
 
-## constructor(config)
+## constructor([config])
 
 Initialize a psittacus instance.
 
-### config
+**config** 
+| **parameter** | **description**    | **type**                                            |
+| ------------- | ------------------ | --------------------------------------------------- |
+| method        | core audio api     | "AudioContext"                                      |
+| bufferSize    | buffer size        | 256 \| 512 \| 1024 \| 2048 \| 4096 \| 8192 \| 16384 |
+| sampleRate    | sample rate        | 8000 \| 16000 \| 22050 \| 24000 \| 44100 \| 48000   |
+| bitDepth      | bits of per sample | 8 \|16                                              |
 
-```
-{
-  method: "AudioContext"
-  type: "wav",
-  bufferSize: 4096,
-  sampleRate: 16000,
-}
-```
 
 **example**:
 
 ```
-const recorder = new fast({
-    method: "AudioContext",
-});
+const psittacus = new Psittacus();
 ```
 
 ## start()
@@ -205,7 +198,7 @@ Start Recording.
 **example**:
 
 ```
-recorder.start();
+psittacus.start();
 ```
 
 ## stop()
@@ -215,10 +208,9 @@ Stop Recording.
 **example**:
 
 ```
-recorder.stop(cb)
+psittacus.stop()
 ```
 
-`url` is an object url.
 
 ## pause()
 
@@ -227,7 +219,7 @@ Pause Recording.
 **example**:
 
 ```
-recorder.pause();
+psittacus.pause();
 ```
 
 ## resume()
@@ -237,23 +229,22 @@ Resume Recording.
 **example**:
 
 ```
-recorder.resume();
+psittacus.resume();
 ```
 
 ## export(audioType, callback)
 
 Export specified format audio.
 
-### audioType
+**config** 
+| **parameter** | **description**   | **type**       |
+| ------------- | ----------------- | -------------- |
+| audioType     | export audio type | 'wav'\|'pcm'   |
+| callback      | get a blob object | function(blob) |
 
-'wav'|'pcm'
-
-### callback
-
-function(blob). Get a blob object.
 
 **example**
 
 ```
-recorder.export('wav',cb);
+psittacus.export('wav',cb);
 ```

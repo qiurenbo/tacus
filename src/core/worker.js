@@ -12,7 +12,7 @@ export default class SelfWorker {
 
     this.worker.onmessage = (e) => {
       if (typeof this.cb == "function") {
-        this.cb(e.data.data);
+        this.cb(e.data.blob);
       } else {
         throw Error("Callback should be a function.");
       }

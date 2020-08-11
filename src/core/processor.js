@@ -24,8 +24,6 @@ export default function Processor() {
 
   // onmessage must be a global variable
   self.onmessage = (event) => {
-    // console.log("i am worker, receive:" + event.data.cmd);
-    // console.log("numberOf32fInSingleChannel:" + numberOf32fInSingleChannel);
     switch (event.data.cmd) {
       case "init":
         init(event.data.config);
@@ -62,7 +60,7 @@ export default function Processor() {
     const wav = encodePCM32f2WAV(PCM32fInSingleChannel);
 
     const blob = new Blob([wav], { type: "audio/wav" });
-    postMessage({ cmd: "exportWAV", data: blob });
+    postMessage({ cmd: "exportWAV", blob });
   };
 
   const init = (config) => {
