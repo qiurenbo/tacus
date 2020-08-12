@@ -18,11 +18,8 @@
   - [Bit Depth](#bit-depth)
   - [Bit Rate](#bit-rate)
   - [Channels](#channels)
-- [MediaRecorder VS AudioContext](#mediarecorder-vs-audiocontext)
-  - [MediaRecorder](#mediarecorder)
-    - [Audio Information](#audio-information)
-  - [AudioContext](#audiocontext)
-    - [Reference](#reference)
+- [AudioContext](#audiocontext)
+  - [Reference](#reference)
 - [Quick Start](#quick-start)
 - [Installation](#installation)
   - [Use npm](#use-npm)
@@ -76,38 +73,12 @@ Sound Channel refers to the independent audio signal which is collected or playb
 
 https://www.gearbest.com/blog/how-to/6-types-of-sound-channels-2896
 
-# MediaRecorder VS AudioContext
-
-By default, psittacus use AudioContext as default. This is because. :point_down:
-
-## MediaRecorder
-
-- there’s no bitrate control
-
-- there’s no sample rate or audio quality control
-
-- .webm files (with Vorbis/Opus audio and VP8/VP9 video) will have to be converted before they playback on virtually anything else other than the browsers they were recorded in
-
-[HTML5’s Media Recorder API in Action on Chrome and Firefox](https://blog.addpipe.com/mediarecorder-api/)
-
-### Audio Information
-
-There is a table made by [Remus Negrota](https://blog.addpipe.com/mediarecorder-api/).
-
-| name        | CHROME 49+ | CHROME 52+ | FIREFOX 30 AND UP |
-| ----------- | ---------- | ---------- | ----------------- |
-| Container   | webm       | webm       | webm              |
-| Audio codec | Opus       | Opus       | Vorbis            |
-| Sample rate | 48kHz      | 48kHz      | 44.1 kHz          |
-
-webm is an open source format that contains video compressed with VP8 or VP9 codecs and audio compressed with Vorbis or Opus codecs. The format is usually used for media content on web pages and it is supported by all the popular web-browser.
-
-## AudioContext
+# AudioContext
 
 Audio context can let user to control the sample rate and bit rate in recording.
 For compatibility and flexibility, psittacus use [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) instead [AudioWorkletProcessor](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor) by default.
 
-### Reference
+## Reference
 
 [MDN-MediaStreamAudioSourceNode](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioSourceNode)
 
@@ -176,14 +147,13 @@ See [examples](./example) for more details.
 
 Initialize a psittacus instance.
 
-**config** 
-| **parameter** | **description**    | **type**                                            |
+**config**
+| **parameter** | **description** | **type** |
 | ------------- | ------------------ | --------------------------------------------------- |
-| method        | core audio api     | "AudioContext"                                      |
-| bufferSize    | buffer size        | 256 \| 512 \| 1024 \| 2048 \| 4096 \| 8192 \| 16384 |
-| sampleRate    | sample rate        | 8000 \| 16000 \| 22050 \| 24000 \| 44100 \| 48000   |
-| bitDepth      | bits of per sample | 8 \|16                                              |
-
+| method | core audio api | "AudioContext" |
+| bufferSize | buffer size | 256 \| 512 \| 1024 \| 2048 \| 4096 \| 8192 \| 16384 |
+| sampleRate | sample rate | 8000 \| 16000 \| 22050 \| 24000 \| 44100 \| 48000 |
+| bitDepth | bits of per sample | 8 \|16 |
 
 **example**:
 
@@ -211,7 +181,6 @@ Stop Recording.
 psittacus.stop()
 ```
 
-
 ## pause()
 
 Pause Recording.
@@ -236,12 +205,11 @@ psittacus.resume();
 
 Export specified format audio.
 
-**config** 
-| **parameter** | **description**   | **type**       |
+**config**
+| **parameter** | **description** | **type** |
 | ------------- | ----------------- | -------------- |
-| audioType     | export audio type | 'wav'\|'pcm'   |
-| callback      | get a blob object | function(blob) |
-
+| audioType | export audio type | 'wav'\|'pcm' |
+| callback | get a blob object | function(blob) |
 
 **example**
 

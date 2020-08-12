@@ -9,13 +9,13 @@ describe("export wav should work", () => {
       bitDepth: 16,
     };
 
-    let recorder = new Psittacus(config);
+    let psittacus = new Psittacus(config);
 
-    recorder.start();
+    psittacus.record();
 
-    recorder.stop();
+    psittacus.stop();
 
-    recorder.export("wav", (blob) => {
+    psittacus.export("wav", (blob) => {
       expect(blob.size).toEqual(44);
       done();
     });
@@ -29,13 +29,13 @@ describe("export wav should work", () => {
       bitDepth: 16,
     };
 
-    let recorder = new Psittacus(config);
+    let psittacus = new Psittacus(config);
 
-    recorder.start();
+    psittacus.record();
 
-    recorder.stop();
+    psittacus.stop();
 
-    recorder.export("wav", async (blob) => {
+    psittacus.export("wav", async (blob) => {
       const buffer = await blob.arrayBuffer();
       const view = new DataView(buffer);
       expect(view.getUint32(24, true)).toEqual(16000);
@@ -44,13 +44,13 @@ describe("export wav should work", () => {
 
     config.sampleRate = 8000;
 
-    recorder = new Psittacus(config);
+    psittacus = new Psittacus(config);
 
-    recorder.start();
+    psittacus.record();
 
-    recorder.stop();
+    psittacus.stop();
 
-    recorder.export("wav", async (blob) => {
+    psittacus.export("wav", async (blob) => {
       const buffer = await blob.arrayBuffer();
       const view = new DataView(buffer);
       expect(view.getUint32(24, true)).toEqual(8000);
@@ -66,13 +66,13 @@ describe("export wav should work", () => {
       bitDepth: 16,
     };
 
-    let recorder = new Psittacus(config);
+    let psittacus = new Psittacus(config);
 
-    recorder.start();
+    psittacus.record();
 
-    recorder.stop();
+    psittacus.stop();
 
-    recorder.export("wav", async (blob) => {
+    psittacus.export("wav", async (blob) => {
       const buffer = await blob.arrayBuffer();
       const view = new DataView(buffer);
       expect(view.getUint16(34, true)).toEqual(16);
@@ -81,13 +81,13 @@ describe("export wav should work", () => {
 
     config.bitDepth = 8;
 
-    recorder = new Psittacus(config);
+    psittacus = new Psittacus(config);
 
-    recorder.start();
+    psittacus.record();
 
-    recorder.stop();
+    psittacus.stop();
 
-    recorder.export("wav", async (blob) => {
+    psittacus.export("wav", async (blob) => {
       const buffer = await blob.arrayBuffer();
       const view = new DataView(buffer);
       expect(view.getUint16(34, true)).toEqual(8);

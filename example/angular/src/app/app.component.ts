@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import Psittacus from "../../../../dist/psittacus";
+import Psittacus from "../../../../dev/psittacus";
 import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({

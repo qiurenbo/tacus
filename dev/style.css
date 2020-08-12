@@ -1,0 +1,9 @@
+#config {
+  margin-bottom: 10px;
+  height: 20px;
+}
+
+#config div {
+  margin-right: 10px;
+  float: left;
+}

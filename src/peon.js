@@ -1,16 +1,19 @@
-export default class SelfWorker {
-  worker = null;
+import Brain from "./brain";
+export default class Peon {
+  self = null;
 
   cb = null;
 
-  constructor(f) {
-    this.worker = new Worker(
+  constructor() {
+    this.self = new Worker(
       URL.createObjectURL(
-        new Blob([`(${f.toString()})()`], { type: "application/javascript" })
+        new Blob([`(${Brain.toString()})()`], {
+          type: "application/javascript",
+        })
       )
     );
 
-    this.worker.onmessage = (e) => {
+    this.self.onmessage = (e) => {
       if (typeof this.cb == "function") {
         this.cb(e.data.blob);
       } else {
@@ -20,29 +23,29 @@ export default class SelfWorker {
   }
 
   record(buffer) {
-    this.worker.postMessage({
+    this.self.postMessage({
       cmd: "record",
       buffer,
     });
   }
 
   init(config) {
-    this.worker.postMessage({
+    this.self.postMessage({
       cmd: "init",
       config,
     });
   }
 
-  export(audioType, cb) {
+  export(type, cb) {
     this.cb = cb;
-    this.worker.postMessage({
+    this.self.postMessage({
       cmd: "export",
-      audioType,
+      type,
     });
   }
 
   release() {
-    this.worker.postMessage({
+    this.self.postMessage({
       cmd: "release",
     });
   }

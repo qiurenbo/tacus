@@ -2,7 +2,7 @@
  * AudioProcessor is a web worker for parse raw recording data.
  * It is used as a inline worker.
  */
-export default function Processor() {
+export default function Brain() {
   let sampleRate = 16000;
 
   let numberOfOutputChannels = 1;
@@ -34,7 +34,7 @@ export default function Processor() {
       case "stop":
         break;
       case "export":
-        if (event.data.audioType === "wav") {
+        if (event.data.type === "wav") {
           exportWAV();
         }
         break;
