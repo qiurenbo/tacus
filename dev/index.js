@@ -1,7 +1,9 @@
+import { Psittacus } from "../src";
+import "./style.css";
 const startAndStopBtn = document.getElementById("start-stop");
 const pauseAndResumeBtn = document.getElementById("pause-resume");
 const downloadBtn = document.getElementById("download");
-
+const playBtn = document.getElementById("play");
 let config = {
   method: "AudioContext",
   bufferSize: 4096,
@@ -9,54 +11,54 @@ let config = {
   bitDepth: 16,
 };
 
-let recorder = new Psittacus();
+let psittacus = new Psittacus();
 
 let blob;
 let binary;
 
-function onStart() {
+window.onStart = () => {
   const state = startAndStopBtn.innerHTML;
   switch (state) {
     case "Stop":
       startAndStopBtn.innerHTML = "Start";
-      recorder.stop();
+      psittacus.stop();
       pauseAndResumeBtn.disabled = true;
       downloadBtn.disabled = false;
-      console.log("here");
-      recorder.export("wav", async (_blob) => {
+      playBtn.disabled = false;
+      psittacus.export("wav", (_blob) => {
         blob = _blob;
-        console.log(blob);
       });
 
       break;
 
     case "Start":
-      recorder.setConfig(config);
+      psittacus.setConfig(config);
       startAndStopBtn.innerHTML = "Stop";
-      recorder.record();
+      psittacus.record();
       pauseAndResumeBtn.disabled = false;
       downloadBtn.disabled = true;
+      playBtn.disabled = true;
 
       break;
   }
-}
+};
 
-function onPause() {
+window.onPause = () => {
   const state = pauseAndResumeBtn.innerHTML;
   switch (state) {
     case "Resume":
       pauseAndResumeBtn.innerHTML = "Pause";
-      recorder.resume();
+      psittacus.resume();
       break;
 
     case "Pause":
       pauseAndResumeBtn.innerHTML = "Resume";
-      recorder.pause();
+      psittacus.pause();
       break;
   }
-}
+};
 
-function onDownload() {
+window.onDownload = () => {
   const downloadEl = document.createElement("a");
   downloadEl.style = "display: none";
   downloadEl.innerHTML = "download";
@@ -67,18 +69,23 @@ function onDownload() {
   downloadEl.click();
   document.body.removeChild(downloadEl);
   downloadBtn.disabled = true;
-}
+};
 
-function onBitDepthChange(event) {
+window.onBitDepthChange = (event) => {
   config.bitDepth = event.target.value;
   debugDIV.innerHTML = JSON.stringify(config);
-}
-function onSampleRateChange(event) {
+};
+
+window.onSampleRateChange = (event) => {
   config.sampleRate = event.target.value;
   debugDIV.innerHTML = JSON.stringify(config);
-}
+};
 
-function onBufferSizeChange(event) {
+window.onBufferSizeChange = (event) => {
   config.bufferSize = event.target.value;
   debugDIV.innerHTML = JSON.stringify(config);
-}
+};
+
+window.onPlay = (event) => {
+  psittacus.play();
+};

@@ -33,6 +33,9 @@ export default class Core {
   // web peon to parse audio
   peon = null;
 
+  // audio blob
+  blob = null;
+
   config = {
     method: "AudioContext",
 
@@ -141,23 +144,38 @@ export default class Core {
     }
   }
 
-  play() {
-    if (this.src) {
-      // play audio by src
-    } else if (this.peon) {
-      this.peon.export("wav", async (blob) => {
-        const context = new AudioContext();
-        const source = context.createBufferSource(); // creates a sound source
-        const buffer = await blob.arrayBuffer();
+  async play(setState) {
+    const start = async () => {
+      const buffer = await this.blob.arrayBuffer();
+      const context = new AudioContext();
 
-        context.decodeAudioData(buffer, function (buffer) {
-          source.buffer = buffer; // tell the source which sound to play
-          source.connect(context.destination); // connect the source to the context's destination (the speakers)
-          source.record(0);
-        });
+      // https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode
+      const sourceNode = context.createBufferSource(); //
+
+      context.decodeAudioData(buffer, (buffer) => {
+        sourceNode.buffer = buffer;
+        sourceNode.connect(context.destination);
+        sourceNode.start(0);
+
+        sourceNode.onended = () => {
+          sourceNode.disconnect(context.destination);
+          setState();
+        };
       });
+    };
+
+    if (this.blob) {
+      start(this.blob);
     } else {
-      throw new Error("No sound to be played.");
+      await new Promise((resolve, reject) => {
+        let id = setInterval((cb) => {
+          if (this.blob) {
+            clearInterval(id);
+            start(this.blob);
+            resolve();
+          }
+        }, 50);
+      });
     }
   }
 
@@ -172,6 +190,12 @@ export default class Core {
     }
 
     this.context && this.context.close();
+    this.context = null;
+
+    this.peon.export("wav", (blob) => {
+      this.blob = blob;
+      this.peon.init();
+    });
   }
 
   pause() {
@@ -190,8 +214,16 @@ export default class Core {
     }
   }
 
-  export(type, cb) {
-    this.peon.export(type, cb);
+  async export(type, cb, setState) {
+    await new Promise((resolve, reject) => {
+      let id = setInterval(() => {
+        if (this.blob) {
+          clearInterval(id);
+          cb(this.blob);
+          resolve();
+        }
+      }, 50);
+    });
   }
 
   setConfig(config) {

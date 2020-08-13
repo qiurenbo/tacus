@@ -11,10 +11,9 @@
     "dist/"
   ],
   "scripts": {
-    "dev": "webpack-dev-server --config webpack-dev.config.js",
-    "build:dev": "webpack --config webpack-dev.config.js",
-    "build:prod": "webpack --config webpack-prod.config.js",
-    "test": "npm run build:prod && karma start karma.conf.js",
+    "dev": "webpack-dev-server  --config webpack-dev.config.js",
+    "build": "webpack --config webpack-prod.config.js",
+    "test": "npm run build && karma start karma.conf.js",
     "publish": "npm run build:prod && np"
   },
   "repository": {
@@ -36,6 +35,8 @@
     "@babel/runtime": "^7.11.2",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^4.2.1",
+    "html-webpack-plugin": "^4.3.0",
     "jasmine-core": "^3.6.0",
     "karma": "^5.1.1",
     "karma-chrome-launcher": "^3.1.0",
@@ -43,6 +44,7 @@
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "^4.0.2",
     "np": "^6.4.0",
+    "style-loader": "^1.2.1",
     "webpack": "^4.44.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"

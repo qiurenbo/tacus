@@ -4,6 +4,12 @@ export default class Peon {
 
   cb = null;
 
+  // setState index.js to change state
+  setState = null;
+
+  // notify core js
+  notify = null;
+
   constructor() {
     this.self = new Worker(
       URL.createObjectURL(
@@ -18,6 +24,10 @@ export default class Peon {
         this.cb(e.data.blob);
       } else {
         throw Error("Callback should be a function.");
+      }
+
+      if (typeof this.setState == "function") {
+        this.setState();
       }
     };
   }
@@ -36,8 +46,9 @@ export default class Peon {
     });
   }
 
-  export(type, cb) {
+  export(type, cb, setState) {
     this.cb = cb;
+    this.setState = setState;
     this.self.postMessage({
       cmd: "export",
       type,

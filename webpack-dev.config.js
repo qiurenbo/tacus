@@ -1,22 +1,26 @@
 const path = require("path");
-
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
-  entry: "./src/index.js",
+  entry: "./dev/index.js",
   output: {
-    path: path.resolve(__dirname, "dev"),
-    filename: "psittacus.js",
-    library: "Psittacus",
-    libraryTarget: "umd",
-    libraryExport: "Psittacus",
+    path: path.resolve(__dirname, "dist"),
+    filename: "dev.js",
   },
   watch: true,
   devtool: "inline-source-map",
   devServer: {
-    contentBase: path.join(__dirname, "dev"),
     compress: true,
-    port: 8080,
+    port: 8000,
     watchContentBase: true,
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./dev/index.html",
+      filename: "index.html",
+    }),
+    new CleanWebpackPlugin(),
+  ],
   module: {
     rules: [
       {
@@ -38,6 +42,10 @@ module.exports = {
             ],
           },
         },
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

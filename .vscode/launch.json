@@ -4,13 +4,11 @@
       "name": "Launch Chrome",
       "request": "launch",
       "type": "pwa-chrome",
-      "url": "http://localhost:8080",
+      "url": "http://localhost:8000",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack://Psittacus/./src/*": "${webRoot}/src/*" // webpack://Psittacus/./src/brain.js
-        // "webpack://Psittacus/./*": "${webRoot}/*", // unsure how/why webpack generates ./links.js
-        // "webpack://Psittacus/../*": "${webRoot}/*", // unsure how/why webpack generates ../links.js
-        // "webpack://Psittacus/*": "*" // a default, catch everything else
+        "webpack:///./src/*": "${webRoot}/src/*",
+        "webpack:///./dev/*": "${webRoot}/dev/*"
       }
     }
   ]

@@ -3,7 +3,6 @@ import createStore from "./manager";
 export class Psittacus {
   core;
   store;
-  state = "initializing";
 
   constructor(config) {
     this.core = new Core(config);
@@ -11,11 +10,13 @@ export class Psittacus {
   }
 
   reducer = (state = "stopped", action = { type: "stopped" }) => {
-    console.log(action);
+    console.log(state, action);
     switch (action.type) {
       case "playing":
         if (state === "stopped" || state === "paused") {
-          this.core.play();
+          this.core.play(() => {
+            this.store.dispatch({ type: "stopped" });
+          });
           return action.type;
         }
         break;
@@ -26,8 +27,10 @@ export class Psittacus {
         }
         break;
       case "stopped":
-        if (state === "playing" || state === "recording") {
+        if (state === "recording") {
           this.core.stop();
+          return action.type;
+        } else if (state === "playing" || state === "exporting") {
           return action.type;
         }
         break;
@@ -39,7 +42,9 @@ export class Psittacus {
         break;
       case "exporting":
         if (state === "stopped" || state === "paused") {
-          this.core.export(action.payload.type, action.payload.cb);
+          this.core.export(action.payload.type, action.payload.cb, () => {
+            this.store.dispatch({ type: "stopped" });
+          });
           return action.type;
         }
         break;

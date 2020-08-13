@@ -65,7 +65,7 @@ export default function Brain() {
 
   const init = (config) => {
     if (config.sampleRate) {
-      sampleRate = config.sampleRate;
+      sampleRate = +config.sampleRate;
     }
     if (config.bitDepth) {
       bitDepth = +config.bitDepth;
@@ -82,6 +82,7 @@ export default function Brain() {
   };
 
   const fillPCM32fSamples = (pcmFloatPiece) => {
+    console.log(pcmFloatPiece);
     test = [];
     test[0] = [];
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {
