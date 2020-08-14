@@ -73,7 +73,7 @@ export default class Core {
    */
   record() {
     this.peon.init(this.config);
-
+    this.blob = null;
     /**
      * The MediaDevices.getUserMedia() method prompts the user for permission to use a media input
      * which produces a MediaStream with tracks containing the requested types of media.
@@ -144,7 +144,7 @@ export default class Core {
     }
   }
 
-  async play(setState) {
+  play(setState) {
     const start = async () => {
       const buffer = await this.blob.arrayBuffer();
       const context = new AudioContext();
@@ -167,21 +167,18 @@ export default class Core {
     if (this.blob) {
       start(this.blob);
     } else {
-      await new Promise((resolve, reject) => {
-        let id = setInterval((cb) => {
-          if (this.blob) {
-            clearInterval(id);
-            start(this.blob);
-            resolve();
-          }
-        }, 50);
-      });
+      this.loopUntilBlobExported(cb);
     }
   }
 
   stop() {
     this.sourceNode && this.sourceNode.disconnect();
     this.processNode && this.processNode.disconnect();
+    this.context && this.context.close();
+
+    this.context = null;
+    this.sourceNode = null;
+    this.processNode = null;
 
     // https://stackoverflow.com/questions/26670677/remove-red-icon-after-recording-has-stopped/26671315
     if (this.stream && this.stream.getTracks) {
@@ -189,13 +186,7 @@ export default class Core {
       this.stream = null;
     }
 
-    this.context && this.context.close();
-    this.context = null;
-
-    this.peon.export("wav", (blob) => {
-      this.blob = blob;
-      this.peon.init();
-    });
+    this.notifyPeonToExport();
   }
 
   pause() {
@@ -214,16 +205,22 @@ export default class Core {
     }
   }
 
-  async export(type, cb, setState) {
-    await new Promise((resolve, reject) => {
-      let id = setInterval(() => {
-        if (this.blob) {
-          clearInterval(id);
-          cb(this.blob);
-          resolve();
-        }
-      }, 50);
+  /**
+   * notify peon web worker to export
+   */
+  notifyPeonToExport() {
+    this.peon.export("wav", (blob) => {
+      this.blob = blob;
+      this.peon.init(this.config);
     });
+  }
+
+  export(type, cb, setState) {
+    if (!this.blob) {
+      this.loopUntilBlobExported(cb);
+    } else {
+      cb(this.blob);
+    }
   }
 
   setConfig(config) {
@@ -247,5 +244,14 @@ export default class Core {
     }
 
     return buffer;
+  }
+
+  loopUntilBlobExported(cb) {
+    let id = setInterval(() => {
+      if (this.blob) {
+        clearInterval(id);
+        cb(this.blob);
+      }
+    }, 50);
   }
 }
