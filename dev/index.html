@@ -39,16 +39,18 @@
       </div>
     </div>
 
-    <button id="start-stop" onclick="onStart()">Start</button>
+    <button id="start-stop" onclick="onRecord()">Record</button>
 
-    <button id="pause-resume" disabled="true" onclick="onPause()">Pause</button>
+    <button id="pause-resume" onclick="onPause()">Pause</button>
 
-    <button id="download" disabled="true" onclick="onDownload()">
+    <button id="download" onclick="onDownload()">
       Download
     </button>
 
-    <button id="play" disabled="true" onclick="onPlay()">
+    <button id="play" onclick="onPlay()">
       Play
     </button>
+
+    <div id="debug"></div>
   </body>
 </html>

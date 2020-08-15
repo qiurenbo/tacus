@@ -11,6 +11,7 @@
 <!-- TOC -->
 
 - [Psittacus](#psittacus)
+- [Features](#features)
 - [Instruction](#instruction)
 - [Preparation](#preparation)
   - [Audio Format](#audio-format)
@@ -29,14 +30,16 @@
   - [Usage](#usage)
 - [API](#api)
   - [constructor([config])](#constructorconfig)
-  - [start()](#start)
+  - [record()](#record)
   - [stop()](#stop)
   - [pause()](#pause)
   - [resume()](#resume)
-  - [export(audioType, callback)](#exportaudiotype-callback)
+  - [export(type, callback)](#exporttype-callback)
 
 <!-- /TOC -->
-
+# Features
+- Powerful. It is not only a audio player but also a recorder.
+- Easy. Use only 5 API to do every thing about recording and playing.
 # Instruction
 
 psittacus is a simple library to recorder audio in browser.
@@ -148,12 +151,12 @@ See [examples](./example) for more details.
 Initialize a psittacus instance.
 
 **config**
-| **parameter** | **description** | **type** |
+| **parameter** | **description**    | **type**                                            |
 | ------------- | ------------------ | --------------------------------------------------- |
-| method | core audio api | "AudioContext" |
-| bufferSize | buffer size | 256 \| 512 \| 1024 \| 2048 \| 4096 \| 8192 \| 16384 |
-| sampleRate | sample rate | 8000 \| 16000 \| 22050 \| 24000 \| 44100 \| 48000 |
-| bitDepth | bits of per sample | 8 \|16 |
+| method        | core audio api     | "AudioContext"                                      |
+| bufferSize    | buffer size        | 256 \| 512 \| 1024 \| 2048 \| 4096 \| 8192 \| 16384 |
+| sampleRate    | sample rate        | 8000 \| 16000 \| 22050 \| 24000 \| 44100 \| 48000   |
+| bitDepth      | bits of per sample | 8 \|16                                              |
 
 **example**:
 
@@ -161,19 +164,19 @@ Initialize a psittacus instance.
 const psittacus = new Psittacus();
 ```
 
-## start()
+##  record()
 
 Start Recording.
 
 **example**:
 
 ```
-psittacus.start();
+psittacus.record();
 ```
 
 ## stop()
 
-Stop Recording.
+Stop recording or playing.
 
 **example**:
 
@@ -183,7 +186,7 @@ psittacus.stop()
 
 ## pause()
 
-Pause Recording.
+Pause recording or playing.
 
 **example**:
 
@@ -193,7 +196,7 @@ psittacus.pause();
 
 ## resume()
 
-Resume Recording.
+Resume recording or playing.
 
 **example**:
 
@@ -201,15 +204,15 @@ Resume Recording.
 psittacus.resume();
 ```
 
-## export(audioType, callback)
+## export(type, callback)
 
 Export specified format audio.
 
 **config**
-| **parameter** | **description** | **type** |
+| **parameter** | **description**   | **type**       |
 | ------------- | ----------------- | -------------- |
-| audioType | export audio type | 'wav'\|'pcm' |
-| callback | get a blob object | function(blob) |
+| type          | export audio type | 'wav'\|'pcm'   |
+| callback      | get a blob object | function(blob) |
 
 **example**
 

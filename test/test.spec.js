@@ -1,5 +1,30 @@
 import Psittacus from "psittacus";
 
+describe("state should transfer properly", () => {
+  it("recording should be transferred from recording to stopped", () => {
+    let psittacus = new Psittacus();
+    expect(psittacus.getState()).toEqual("stopped");
+    psittacus.record();
+
+    expect(psittacus.getState()).toEqual("recording");
+
+    psittacus.stop();
+
+    expect(psittacus.getState()).toEqual("stopped");
+  });
+
+  it("playing should be transferred from playing to stopped", () => {
+    let psittacus = new Psittacus();
+    expect(psittacus.getState()).toEqual("stopped");
+    psittacus.record();
+    expect(psittacus.getState()).toEqual("recording");
+    psittacus.stop();
+    expect(psittacus.getState()).toEqual("stopped");
+    psittacus.play();
+    expect(psittacus.getState()).toEqual("stopped");
+  });
+});
+
 describe("export wav should work", () => {
   it("wav header should be 44 bytes", (done) => {
     let config = {

@@ -18,8 +18,9 @@ let createStore = (reducer) => {
   };
 
   let dispatch = (action) => {
+    console.debug("prestate:" + getState());
     state = reducer(state, action);
-
+    console.debug("curstate:" + state);
     listeners.forEach((listener) => {
       listener();
     });

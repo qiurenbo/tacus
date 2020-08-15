@@ -3,6 +3,30 @@ import Peon from "./peon";
  * Reference by https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
  */
 export default class Core {
+  config = {
+    // same as https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createScriptProcessor
+    // 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384
+    bufferSize: 4096,
+    numberOfInputChannels: 1,
+    numberOfOutputChannels: 1,
+
+    // same as https://developer.mozilla.org/en-US/docs/Web/API/AudioContextOptions
+    latencyHint: "interactive",
+
+    // 8000 | 16000 | 22050 | 24000 | 44100 | 48000
+    sampleRate: 16000,
+
+    bitDepth: 16,
+
+    // audio url
+    src: "",
+
+    // do some special on audio
+    onaudioprocess: (e) => {
+      return e;
+    },
+  };
+
   // audio context
   context = null;
 
@@ -36,25 +60,7 @@ export default class Core {
   // audio blob
   blob = null;
 
-  config = {
-    method: "AudioContext",
-
-    // same as https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createScriptProcessor
-    // 256 | 512 | 1024 | 2048 | 4096 | 8192 | 16384
-    bufferSize: 4096,
-    numberOfInputChannels: 1,
-    numberOfOutputChannels: 1,
-
-    // same as https://developer.mozilla.org/en-US/docs/Web/API/AudioContextOptions
-    latencyHint: "interactive",
-    // 8000 | 16000 | 22050 | 24000 | 44100 | 48000
-    sampleRate: 16000,
-
-    bitDepth: 16,
-
-    // audio url
-    src: "",
-  };
+  isRecorded = false;
 
   constructor(config = null) {
     if (config) {
@@ -68,12 +74,29 @@ export default class Core {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
   }
 
+  get peonConfig() {
+    let config = {};
+    const deletedMethods = ["onaudioprocess"];
+
+    Object.assign(config, this.config);
+
+    deletedMethods.forEach((method) => {
+      if (config[method]) {
+        delete config[method];
+      }
+    });
+
+    return config;
+  }
+
   /**
    * input stream => sourceNode => processNode => destination
    */
   record() {
-    this.peon.init(this.config);
+    console.debug(this.peonConfig);
+    this.peon.init(this.peonConfig);
     this.blob = null;
+    this.isRecorded = false;
     /**
      * The MediaDevices.getUserMedia() method prompts the user for permission to use a media input
      * which produces a MediaStream with tracks containing the requested types of media.
@@ -121,6 +144,8 @@ export default class Core {
            * https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode/audioprocess_event
            */
           this.processNode.onaudioprocess = (e) => {
+            this.isRecorded = true;
+            e = this.config.onaudioprocess(e);
             this.peon.record(this.getInputBuffer(e));
           };
 
@@ -147,6 +172,10 @@ export default class Core {
   play(setState) {
     const start = async () => {
       const buffer = await this.blob.arrayBuffer();
+
+      if (buffer.byteLength === 0) {
+        throw new Error("No sound to be played");
+      }
       const context = new AudioContext();
 
       // https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode
@@ -165,9 +194,11 @@ export default class Core {
     };
 
     if (this.blob) {
-      start(this.blob);
+      start();
     } else {
-      this.loopUntilBlobExported(cb);
+      this.loopUntilBlobExported().then(() => {
+        start();
+      });
     }
   }
 
@@ -189,16 +220,32 @@ export default class Core {
     this.notifyPeonToExport();
   }
 
-  pause() {
+  pausePlaying() {
     if (this.processNode) {
       this.sourceNode.disconnect();
+      this.processNode.disconnect();
     } else {
       this.context.suspend();
     }
   }
 
-  resume() {
+  pauseRecording() {
+    if (this.processNode && this.sourceNode) {
+      this.sourceNode.disconnect();
+      this.processNode.disconnect();
+    }
+  }
+
+  resumeRecording() {
+    if (this.processNode && this.sourceNode) {
+      this.processNode.connect(this.context.destination);
+      this.sourceNode.connect(this.processNode);
+    }
+  }
+
+  resumePlaying() {
     if (this.processNode) {
+      this.processNode.connect(this.context.destination);
       this.sourceNode.connect(this.processNode);
     } else {
       this.context.resume();
@@ -211,13 +258,18 @@ export default class Core {
   notifyPeonToExport() {
     this.peon.export("wav", (blob) => {
       this.blob = blob;
-      this.peon.init(this.config);
+      this.peon.init(this.peonConfig);
     });
   }
 
   export(type, cb, setState) {
     if (!this.blob) {
-      this.loopUntilBlobExported(cb);
+      // loopUntilBlobExported return an blob but you can also use this.blob.
+      // Because we will cache the latest recording or playing blob in this.blob.
+      this.loopUntilBlobExported().then(() => {
+        cb(this.blob);
+        setState();
+      });
     } else {
       cb(this.blob);
     }
@@ -246,12 +298,14 @@ export default class Core {
     return buffer;
   }
 
-  loopUntilBlobExported(cb) {
-    let id = setInterval(() => {
-      if (this.blob) {
-        clearInterval(id);
-        cb(this.blob);
-      }
-    }, 50);
+  loopUntilBlobExported() {
+    return new Promise((resolve, reject) => {
+      let id = setInterval(() => {
+        if (this.blob) {
+          clearInterval(id);
+          resolve(this.blob);
+        }
+      }, 50);
+    });
   }
 }

@@ -82,7 +82,7 @@ export default function Brain() {
   };
 
   const fillPCM32fSamples = (pcmFloatPiece) => {
-    console.log(pcmFloatPiece);
+    console.debug(pcmFloatPiece);
     test = [];
     test[0] = [];
     for (let channel = 0; channel < numberOfOutputChannels; channel++) {

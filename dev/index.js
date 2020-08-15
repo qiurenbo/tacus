@@ -4,40 +4,35 @@ const startAndStopBtn = document.getElementById("start-stop");
 const pauseAndResumeBtn = document.getElementById("pause-resume");
 const downloadBtn = document.getElementById("download");
 const playBtn = document.getElementById("play");
+const debugDIV = document.getElementById("debug");
 let config = {
-  method: "AudioContext",
   bufferSize: 4096,
   sampleRate: 16000,
   bitDepth: 16,
 };
+debugDIV.innerHTML = JSON.stringify(config);
 
 let psittacus = new Psittacus();
-
 let blob;
 let binary;
 
-window.onStart = () => {
+window.onRecord = () => {
   const state = startAndStopBtn.innerHTML;
   switch (state) {
     case "Stop":
-      startAndStopBtn.innerHTML = "Start";
+      startAndStopBtn.innerHTML = "Record";
       psittacus.stop();
-      pauseAndResumeBtn.disabled = true;
-      downloadBtn.disabled = false;
-      playBtn.disabled = false;
-      psittacus.export("wav", (_blob) => {
-        blob = _blob;
+      psittacus.export("wav", (wavBlob) => {
+        blob = wavBlob;
+        console.log(blob);
       });
 
       break;
 
-    case "Start":
+    case "Record":
       psittacus.setConfig(config);
       startAndStopBtn.innerHTML = "Stop";
       psittacus.record();
-      pauseAndResumeBtn.disabled = false;
-      downloadBtn.disabled = true;
-      playBtn.disabled = true;
 
       break;
   }
@@ -63,12 +58,10 @@ window.onDownload = () => {
   downloadEl.style = "display: none";
   downloadEl.innerHTML = "download";
   downloadEl.download = "audio.wav";
-  console.log(blob);
   downloadEl.href = URL.createObjectURL(blob);
   document.body.appendChild(downloadEl);
   downloadEl.click();
   document.body.removeChild(downloadEl);
-  downloadBtn.disabled = true;
 };
 
 window.onBitDepthChange = (event) => {

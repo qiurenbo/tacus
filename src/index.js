@@ -1,5 +1,6 @@
 import Core from "./core";
 import createStore from "./manager";
+
 export class Psittacus {
   core;
   store;
@@ -9,50 +10,73 @@ export class Psittacus {
     this.store = createStore(this.reducer);
   }
 
-  reducer = (state = "stopped", action = { type: "stopped" }) => {
-    console.log(state, action);
+  reducer = (state = "stopped", action = { type: "stop" }) => {
+    console.debug(state, action);
     switch (action.type) {
-      case "playing":
+      case "play":
         if (state === "stopped" || state === "paused") {
-          this.core.play(() => {
-            this.store.dispatch({ type: "stopped" });
-          });
-          return action.type;
+          if (this.core.isRecorded) {
+            this.core.play(() => {
+              this.store.dispatch({ type: "stop" });
+            });
+            return "playing";
+          } else {
+            return "stopped";
+          }
         }
         break;
-      case "recording":
+      case "record":
         if (state === "stopped" || state === "paused") {
           this.core.record();
-          return action.type;
+          return "recording";
         }
         break;
-      case "stopped":
+      case "stop":
         if (state === "recording") {
           this.core.stop();
-          return action.type;
-        } else if (state === "playing" || state === "exporting") {
-          return action.type;
+          return "stopped";
+        } else if (state === "playing") {
+          return "stopped";
+        } else if (state === "exporting") {
+          return "stopped";
+        }
+        // only for init stopped state
+        else if (state === "stopped") {
+          return "stopped";
         }
         break;
-      case "paused":
-        if (state === "playing" || state === "recording") {
-          this.core.pause();
-          return action.type;
+      case "pause":
+        if (state === "playing") {
+          this.core.pausePlaying();
+          return "playPaused";
+        }
+        if (state === "recording") {
+          this.core.pauseRecording();
+          return "recordPaused";
         }
         break;
-      case "exporting":
+      case "resume":
+        if (state === "playPaused") {
+          this.core.resumePlaying();
+          return "playing";
+        }
+        if (state === "recordPaused") {
+          this.core.resumeRecording();
+          return "recording";
+        }
+        break;
+      case "export":
         if (state === "stopped" || state === "paused") {
           this.core.export(action.payload.type, action.payload.cb, () => {
-            this.store.dispatch({ type: "stopped" });
+            this.store.dispatch({ type: "stop" });
           });
-          return action.type;
+          return "exporting";
         }
         break;
-      case "setting":
+      case "set":
         // setting not change the state
         if (state === "stopped") {
           this.core.setConfig(action.payload.config);
-          return state;
         }
         break;
     }
@@ -61,26 +85,34 @@ export class Psittacus {
   };
 
   record() {
-    this.store.dispatch({ type: "recording" });
+    this.store.dispatch({ type: "record" });
   }
 
   play() {
-    this.store.dispatch({ type: "playing" });
+    this.store.dispatch({ type: "play" });
   }
 
   stop() {
-    this.store.dispatch({ type: "stopped" });
+    this.store.dispatch({ type: "stop" });
   }
 
   pause() {
-    this.store.dispatch({ type: "paused" });
+    this.store.dispatch({ type: "pause" });
+  }
+
+  resume() {
+    this.store.dispatch({ type: "resume" });
   }
 
   export(type, cb) {
-    this.store.dispatch({ type: "exporting", payload: { type, cb } });
+    this.store.dispatch({ type: "export", payload: { type, cb } });
   }
 
   setConfig(config) {
-    this.store.dispatch({ type: "setting", payload: { config } });
+    this.store.dispatch({ type: "set", payload: { config } });
+  }
+
+  getState() {
+    return this.store.getState();
   }
 }
