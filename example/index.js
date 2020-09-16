@@ -2,6 +2,6 @@ tacus = new Tacus();
 tacus.start();
 
 setTimeout(() => {
-  tacus.stop();
+  // tacus.download();
   tacus.play();
 }, 5000);
