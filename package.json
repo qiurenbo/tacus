@@ -11,7 +11,8 @@
     "dist/"
   ],
   "scripts": {
-    "publish": "np"
+    "publish": "np",
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,7 @@
     "url": "https://github.com/qiurenbo/tacus/issues"
   },
   "homepage": "https://github.com/qiurenbo/tacus#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine": "^3.6.1"
+  }
 }

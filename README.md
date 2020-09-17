@@ -22,10 +22,11 @@
   - [Usage](#usage)
 - [API](#api)
   - [constructor[config]](#constructorconfig)
-  - [record](#record)
+  - [start](#start)
   - [stop](#stop)
   - [pause](#pause)
   - [resume](#resume)
+  - [download](#download)
 
 <!-- /TOC -->
 
@@ -81,8 +82,6 @@ let tacus = new tacus();
 tacus.start();
 
 tacus.stop();
-
-
 ```
 
 See [examples](./example) for more details.
@@ -105,14 +104,14 @@ Initialize a Tacus instance.
 const tacus = new Tacus();
 ```
 
-## record()
+## start()
 
-Start Recording.
+Start recording or playing.
 
 **example**:
 
 ```
-tacus.record();
+tacus.start();
 ```
 
 ## stop()
@@ -143,4 +142,14 @@ Resume recording or playing.
 
 ```
 tacus.resume();
+```
+
+## download
+
+download audio.
+
+**example**:
+
+```
+tacus.download();
 ```
