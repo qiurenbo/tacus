@@ -1,10 +1,47 @@
 <html>
   <head>
     <title>Demo</title>
+    <!-- <link rel="stylesheet" type="text/css" href="./style.css" /> -->
   </head>
+  <body>
+    <div id="config">
+      <div>
+        <label>Sample Rate</label>
+        <select onchange="onSampleRateChange(event)">
+          <option value="8000">8000</option>
+          <option value="16000" selected="true">16000</option>
+          <option value="22050">22050</option>
+          <option value="24000">24000</option>
+          <option value="44100">44100</option>
+          <option value="48000">48000</option>
+        </select>
+      </div>
 
-  <body></body>
+      <div>
+        <label>Buffer Size</label>
+        <select onchange="onBufferSizeChange(event)">
+          <option value="256">256</option>
+          <option value="512">512</option>
+          <option value="1024">1024</option>
+          <option value="2048">2048</option>
+          <option value="4096" selected="true">4096</option>
+          <option value="8192">8192</option>
+          <option value="16384">16384</option>
+        </select>
+      </div>
+    </div>
 
-  <script src="../index.js"></script>
-  <script src="./index.js"></script>
+    <button id="start-stop" onclick="onRecord()">Record</button>
+
+    <button id="pause-resume" onclick="onPause()">Pause</button>
+
+    <button id="download" onclick="onDownload()">Download</button>
+
+    <button id="play" onclick="onPlay()">Play</button>
+
+    <div id="debug"></div>
+
+    <script src="../index.js"></script>
+    <script src="./index.js"></script>
+  </body>
 </html>

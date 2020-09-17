@@ -10,15 +10,6 @@
       bufferSize: 4096,
     };
 
-    self._ctx = null;
-    self._pause = false;
-    self._stream = null;
-
-    self._PCM32fSamplesNoFlat = [];
-    self._PCM16iDataView = null;
-    self._PCM32fSamples = null;
-    self._PCM16iSamples = null;
-
     // audio player
     if (typeof arguments[0] === "string") {
       self._assignOptions(arguments[1]);
@@ -30,7 +21,34 @@
     }
   };
 
+  Tacus.prototype._init = function (options) {
+    var self = this;
+
+    self._ctx = null;
+    self._pause = false;
+    self._stream = null;
+    self._audioInputNode = null;
+    self._processNode = null;
+
+    self._PCM32fSamplesNoFlat = [];
+    self._PCM16iDataView = null;
+    self._PCM32fSamples = null;
+    self._PCM16iSamples = null;
+
+    self._setupAudioContext();
+  };
+
   Tacus.prototype._assignOptions = function (options) {
+    var self = this;
+
+    if (options) {
+      Object.assign(self._options, options);
+    }
+  };
+
+  Tacus.prototype.setOptions = function (options) {
+    var self = this;
+
     if (options) {
       Object.assign(self._options, options);
     }
@@ -38,7 +56,28 @@
 
   Tacus.prototype.start = function () {
     var self = this;
-    if (!self._ctx) this._setupAudioContext();
+
+    self._init();
+  };
+
+  Tacus.prototype.pause = function () {
+    var self = this;
+
+    if (self._pause) {
+      return;
+    }
+
+    self._pause = true;
+  };
+
+  Tacus.prototype.resume = function () {
+    var self = this;
+
+    if (!self._pause) {
+      return;
+    }
+
+    self._pause = false;
   };
 
   Tacus.prototype.stop = function () {
@@ -48,22 +87,31 @@
       return;
     }
 
-    self._pause = true;
-    self._flatPCM32fSamples();
-    self._convertPCM32f2PCM16i();
-    self._convertPCM16i2WAV();
+    self._audioInputNode && self._audioInputNode.disconnect();
+    self._processNode && self._processNode.disconnect();
+    self._ctx && self._ctx.close();
+
     // https://stackoverflow.com/questions/26670677/remove-red-icon-after-recording-has-stopped/26671315
     if (self._stream && self._stream.getTracks) {
       self._stream.getTracks().forEach((track) => track.stop());
       self._stream = null;
     }
+
+    self._pause = true;
+    self._flatPCM32fSamples();
+    self._convertPCM32f2PCM16i();
+    self._convertPCM16i2WAV();
   };
 
   Tacus.prototype.play = function () {
     var self = this;
-    if (!self._pause) {
-      self.stop();
+
+    self.stop();
+
+    if (!self._PCM16iDataView) {
+      return;
     }
+
     var context = new AudioContext();
 
     context.decodeAudioData(self._PCM16iDataView.buffer, (buffer) => {
@@ -195,18 +243,19 @@
 
     if (navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+        self._stream = stream;
+
         self._ctx = new AudioContext({
           sampleRate: self._options.sampleRate,
         });
 
-        var audioInputNode = self._ctx.createMediaStreamSource(stream);
+        self._audioInputNode = self._ctx.createMediaStreamSource(stream);
 
-        var processNode = audioInputNode.context.createScriptProcessor(
+        self._processNode = self._audioInputNode.context.createScriptProcessor(
           self._options.bufferSize
         );
 
-        var count = 0;
-        processNode.onaudioprocess = (e) => {
+        self._processNode.onaudioprocess = (e) => {
           if (self._pause) return;
 
           // We only concern single channel
@@ -221,10 +270,10 @@
          * https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/connect
          */
 
-        audioInputNode.connect(processNode);
+        self._audioInputNode.connect(self._processNode);
 
         // Output to destination
-        processNode.connect(self._ctx.destination);
+        self._processNode.connect(self._ctx.destination);
       });
     }
   };

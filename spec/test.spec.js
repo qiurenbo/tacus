@@ -1,6 +1,23 @@
 const { Tacus } = require("../index");
 
-describe("Internal private functions should work", function () {
+describe("Public functions should work", () => {
+  var tacus;
+  beforeEach(() => {
+    tacus = new Tacus();
+    tacus._options.bufferSize = 10;
+    tacus._options.sampleRate = 16000;
+  });
+
+  it("setOptions should work", () => {
+    tacus.setOptions({ bufferSize: 4096, sampleRate: 22050 });
+
+    expect(tacus._options.bufferSize).toBe(4096);
+
+    expect(tacus._options.sampleRate).toBe(22050);
+  });
+});
+
+describe("Internal private functions should work", () => {
   var tacus;
 
   beforeEach(() => {
