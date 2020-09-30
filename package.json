@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "minify": "minify index.js > index.min.js",
-    "publish": "npm run minify && np",
+    "publish": "np",
     "test": "jasmine"
   },
   "repository": {
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/qiurenbo/tacus#readme",
   "devDependencies": {
     "jasmine": "^3.6.1",
-    "minify": "^6.0.0"
+    "minify": "^6.0.0",
+    "np": "^6.5.0"
   }
 }
