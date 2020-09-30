@@ -1,9 +1,8 @@
 # Tacus
 
 [![npm](https://badgen.net/npm/v/tacus)](https://www.npmjs.com/package/tacus)
-[![gzip size](https://badgen.net/badgesize/gzip/https://cdn.jsdelivr.net/npm/tacus@1.1.1/index.min.js)](https://cdn.jsdelivr.net/npm/tacus@1.1.1/index.min.js)
 [![Build Status](https://travis-ci.com/qiurenbo/tacus.svg?branch=master)](https://travis-ci.com/qiurenbo/tacus)
-[![install size](https://packagephobia.com/badge?p=tacus@1.1.1)](https://packagephobia.com/result?p=tacus@1.1.1)
+[![install size](https://packagephobia.com/badge?p=tacus@1.1.2)](https://packagephobia.com/result?p=tacus@1.1.2)
 [![dep](https://badgen.net/david/dep/qiurenbo/tacus?label=deps)](https://david-dm.org/qiurenbo/tacus)
 [![downloads](https://badgen.net/npm/types/tacus)](https://www.npmjs.com/package/tacuss)
 [![](https://data.jsdelivr.com/v1/package/npm/tacus/badge)](https://www.jsdelivr.com/package/npm/tacus)
