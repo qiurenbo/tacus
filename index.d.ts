@@ -11,7 +11,7 @@ export class Tacus {
 
   play(): void;
 
-  exportWAV(): void;
+  exportWAV(): ArrayBuffer;
 
   download(): void;
 }
