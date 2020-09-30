@@ -13,7 +13,6 @@
   ],
   "scripts": {
     "minify": "minify index.js > index.min.js",
-    "publish": "npm run minify && np",
     "test": "jasmine"
   },
   "repository": {
