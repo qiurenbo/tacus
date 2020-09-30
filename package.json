@@ -1,8 +1,8 @@
 {
   "name": "tacus",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "tacus is a simple library to recorder audio in browser",
-  "main": "index.js",
+  "main": "index.min.js",
   "types": "index.d.ts",
   "directories": {
     "example": "example"
