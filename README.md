@@ -15,24 +15,23 @@
 - [Instruction](#instruction)
 - [Quick Start](#quick-start)
 - [Installation](#installation)
-  - [Use npm](#use-npm)
-  - [Use script](#use-script)
-    - [Local](#local)
-    - [CDN](#cdn)
-  - [Usage](#usage)
+    - [Use npm](#use-npm)
+    - [Use script](#use-script)
+        - [Local](#local)
+        - [CDN](#cdn)
+    - [Usage](#usage)
 - [API](#api)
-  - [constructor[config]](#constructorconfig)
-  - [start](#start)
-  - [stop](#stop)
-  - [pause](#pause)
-  - [resume](#resume)
-  - [download](#download)
+    - [constructor[config]](#constructorconfig)
+    - [start](#start)
+    - [stop](#stop)
+    - [pause](#pause)
+    - [resume](#resume)
+    - [download](#download)
 
 <!-- /TOC -->
 
 # Features
 
-- Powerful. It is not only a audio player but also a recorder.
 - Easy. Use only 5 API to do every thing about recording and playing.
 
 # Instruction
