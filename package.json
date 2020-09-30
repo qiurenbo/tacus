@@ -2,16 +2,18 @@
   "name": "tacus",
   "version": "0.1.1",
   "description": "tacus is a simple library to recorder audio in browser",
-  "main": "src/tacus.js",
-  "types": "src/tacus.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "directories": {
     "example": "example"
   },
   "files": [
-    "dist/"
+    "index.min.js",
+    "index.d.ts"
   ],
   "scripts": {
-    "publish": "np",
+    "minify": "minify index.js > index.min.js",
+    "publish": "npm run minify && np",
     "test": "jasmine"
   },
   "repository": {
@@ -25,6 +27,7 @@
   },
   "homepage": "https://github.com/qiurenbo/tacus#readme",
   "devDependencies": {
-    "jasmine": "^3.6.1"
+    "jasmine": "^3.6.1",
+    "minify": "^6.0.0"
   }
 }
