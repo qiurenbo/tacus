@@ -1,5 +1,5 @@
 export class Tacus {
-  constructor(options: { bufferSize: number; sampleRate: number });
+  constructor(options?: { bufferSize?: number; sampleRate?: number });
 
   start(): void;
 
@@ -10,6 +10,8 @@ export class Tacus {
   resume(): void;
 
   play(): void;
+
+  exportWAV(): void;
 
   download(): void;
 }

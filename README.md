@@ -1,9 +1,9 @@
 # Tacus
 
 [![npm](https://badgen.net/npm/v/tacus)](https://www.npmjs.com/package/tacus)
-[![gzip size](https://badgen.net/badgesize/gzip/https://cdn.jsdelivr.net/npm/tacus@1.1.0/index.min.js)](https://cdn.jsdelivr.net/npm/tacus@1.1.0/index.min.js)
+[![gzip size](https://badgen.net/badgesize/gzip/https://cdn.jsdelivr.net/npm/tacus@1.1.1/index.min.js)](https://cdn.jsdelivr.net/npm/tacus@1.1.1/index.min.js)
 [![Build Status](https://travis-ci.com/qiurenbo/tacus.svg?branch=master)](https://travis-ci.com/qiurenbo/tacus)
-[![install size](https://packagephobia.com/badge?p=tacus@1.1.0)](https://packagephobia.com/result?p=tacus@1.1.0)
+[![install size](https://packagephobia.com/badge?p=tacus@1.1.1)](https://packagephobia.com/result?p=tacus@1.1.1)
 [![dep](https://badgen.net/david/dep/qiurenbo/tacus?label=deps)](https://david-dm.org/qiurenbo/tacus)
 [![downloads](https://badgen.net/npm/types/tacus)](https://www.npmjs.com/package/tacuss)
 [![](https://data.jsdelivr.com/v1/package/npm/tacus/badge)](https://www.jsdelivr.com/package/npm/tacus)
@@ -27,6 +27,7 @@
   - [pause](#pause)
   - [resume](#resume)
   - [download](#download)
+  - [exportWAV](#exportwav)
 
 <!-- /TOC -->
 
@@ -55,7 +56,7 @@ npm i tacus
 import it as ES6 module
 
 ```
-import tacus from 'tacus'
+import { Tacus } from 'tacus'
 ```
 
 ## Use script
@@ -77,7 +78,7 @@ You can download the latest version from [here](https://github.com/qiurenbo/tacu
 ## Usage
 
 ```
-let tacus = new tacus();
+let tacus = new Tacus();
 
 tacus.start();
 
@@ -152,4 +153,14 @@ download audio.
 
 ```
 tacus.download();
+```
+
+## exportWAV
+
+export WAV as array buffer
+
+**example**:
+
+```
+tacus.exportWAV();
 ```
